@@ -9,6 +9,10 @@
 
     <string name="text_interval_question_test">Test</string>
     <string name="text_interval_question_test2">Test2</string>
+    <string name="button_interval_question_repeat">Play Again</string>
+    <string name="button_interval_question_new">New Question</string>
+
+
 
 
 
