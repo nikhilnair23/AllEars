@@ -13,6 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+// TODO: 11/28/20
+// - figure out backstack better, when you answer a question or close just nuke it from the stack??
+// - figure out playing all the sounds, have random list of two integers to create intervals
+// - make the screen look not absolutely horrible
+//   - find way to have variable number of buttons? currently 4 per every screen
+// - have some sort of delay after you correctly guess before opening new activity??
+
 public class IntervalQuestionActivity extends AppCompatActivity {
 
     private TextView testText;
