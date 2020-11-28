@@ -2,6 +2,7 @@ package com.example.allears;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,7 +20,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.interval_training_button:
+                openActivityIntervalLanding();
                 break;
         }
     }
+
+
+    private void openActivityIntervalLanding() {
+        Intent intent = new Intent(this, IntervalLandingActivity.class );
+        startActivity( intent );
+    }
+
+
+
 }
