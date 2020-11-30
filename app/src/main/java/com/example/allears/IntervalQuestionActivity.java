@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -135,16 +136,16 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
     // call helper on the buttons related to "medium" difficulty
     private void greyMediumButtons() {
-        greyOut( button1 );
+        greyOut( button2 );
         greyOut( button5 );
         greyOut( button8 );
         greyOut( button10 );
+        greyOut( button11 );
     }
 
     // call helper on the buttons related to "hard" difficulty
     private void greyHardButtons() {
         greyOut( button0 );
-        greyOut( button2 );
         greyOut( button7 );
         greyOut( button9 );
     }
@@ -253,175 +254,37 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         switch ( difficulty ) {
             case "easy":
-                formEasyQuestion( notes );
+                generateQuestionGivenBound( notes, 4 );
                 break;
-
             case "medium":
-                formEasyOrMediumQuestion( notes );
+                generateQuestionGivenBound( notes, 9 );
                 break;
-
             case "hard":
-                formEasyMediumOrHardQuestion( notes );
+                generateQuestionGivenBound( notes, 12 );
                 break;
         }
-
         return notes;
     }
 
 
 
+    // generates an interval by placing possibilities in an array and indexing a random one
+    //   based on difficulty
+    private void generateQuestionGivenBound( ArrayList<Integer> notes, int bound ) {
 
-    // defining easy as octave, or fifth, or fourth
-    private void formEasyQuestion( List<Integer> notes ) {
-        int root = notes.get(0);
+        // all of the possible values in order of difficulty, by index:
+        //   easy   -> (0, 4) ; medium -> (0, 9) ; hard -> (0, 12)
+        ArrayList<Integer> possibilities = new ArrayList<>(
+                Arrays.asList( 2, 4, 5, 7, 3, 6, 9, 11, 12, 1, 8, 10 ));
 
-        boolean ascendHuh = rand.nextBoolean();
-        // 0 = octave, 1 = perf 5, 2 = perf 4, 3 = maj2
-        int type = rand.nextInt(4);
-        int toAdd;
-
-        switch (type) {
-
-            // 0, octave -  12 semitones
-            case 0:
-                toAdd = (ascendHuh) ? root + 12 : root - 12;
-                notes.add(toAdd);
-                answer = 11;
-                break;
-
-            // 1, perfect fifth - 7 semitones
-            case 1:
-                toAdd = (ascendHuh) ? root + 7 : root - 7;
-                notes.add(toAdd);
-                answer = 6;
-                break;
-
-            // 2, perfect fourth - 5 semitones
-            case 2:
-                toAdd = (ascendHuh) ? root + 5 : root - 5;
-                notes.add(toAdd);
-                answer = 4;
-                break;
-
-            // 3, maj2 - 4 semitones
-            case 3:
-                toAdd = ( ascendHuh ) ? root + 4  :  root - 4 ;
-                notes.add( toAdd );
-                answer = 3;
-                break;
-
-
-        }
-    }
-
-
-    private void formEasyOrMediumQuestion( List<Integer> notes ) {
-
-        int variety = rand.nextInt( 2 );
-
-        if (variety == 0) {
-            formEasyQuestion( notes );
-        } else {
-            formMediumQuestion( notes );
-        }
-    }
-
-    private void formEasyMediumOrHardQuestion( List<Integer> notes ) {
-
-        int variety = rand.nextInt( 3 );
-
-        if (variety == 0) {
-            formEasyQuestion( notes );
-        } else if (variety == 1) {
-            formMediumQuestion( notes );
-        } else {
-            formHardQuestion( notes );
-        }
-
-    }
-
-
-
-    private void formMediumQuestion( List<Integer> notes ) {
-        int root = notes.get(0);
+        int root = notes.get( 0 );
         boolean ascendHuh = rand.nextBoolean();
 
-        // 0 = tritone, 1 = maj3, 2 = maj6, 3 = maj7
-        int type = rand.nextInt(4);
-
-        int toAdd;
-        switch (type) {
-
-            // 0, tritone -  6 semitones
-            case 0:
-                toAdd = ( ascendHuh ) ? root + 6  :  root - 6 ;
-                notes.add( toAdd );
-                answer = 5;
-                break;
-
-            // 1, maj2 - 2 semitones
-            case 1:
-                toAdd = ( ascendHuh ) ? root + 2  :  root - 2 ;
-                notes.add( toAdd );
-                answer = 1;
-                break;
-
-            // 2, maj6 -  9 semitones
-            case 2:
-                toAdd = ( ascendHuh ) ? root + 9  :  root - 9 ;
-                notes.add( toAdd );
-                answer = 8;
-                break;
-
-            // 3, maj7 -  11 semitones
-            case 3:
-                toAdd = ( ascendHuh ) ? root + 11  :  root - 11 ;
-                notes.add( toAdd );
-                answer = 10;
-                break;
-        }
+        int boundedVal = possibilities.get( rand.nextInt( bound ));
+        int toAdd = ( ascendHuh ) ? root + boundedVal : root - boundedVal ;
+        notes.add( toAdd );
+        answer = boundedVal - 1;
 
     }
 
-
-
-    private void formHardQuestion( List<Integer> notes ) {
-        int root = notes.get(0);
-        boolean ascendHuh = rand.nextBoolean();
-
-        // 0 = min2, 1 = min3, 2 = min6, 3 = min7
-        int type = rand.nextInt(4);
-
-        int toAdd;
-        switch (type) {
-
-            // 0, min2
-            case 0:
-                toAdd = ( ascendHuh ) ? root + 1  :  root - 1 ;
-                notes.add( toAdd );
-                answer = 0;
-                break;
-
-            // 1, min3
-            case 1:
-                toAdd = ( ascendHuh ) ? root + 3  :  root - 3 ;
-                notes.add( toAdd );
-                answer = 2;
-                break;
-
-            // 2, min6
-            case 2:
-                toAdd = ( ascendHuh ) ? root + 8  :  root - 8 ;
-                notes.add( toAdd );
-                answer = 7;
-                break;
-
-            // 3, min7
-            case 3:
-                toAdd = ( ascendHuh ) ? root + 10  :  root - 10 ;
-                notes.add( toAdd );
-                answer = 9;
-                break;
-        }
-    }
 }
