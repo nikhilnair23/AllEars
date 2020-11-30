@@ -8,22 +8,22 @@
     tools:context=".IntervalQuestionActivity">
 
     <TextView
-        android:id="@+id/text_interval_question_test"
+        android:id="@+id/text_interval_question_selected_difficulty"
         android:layout_width="150dp"
         android:layout_height="43dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
-        android:text="@string/text_interval_question_test"
+        android:text="@string/text_interval_question_selected_difficulty"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_interval_question_test2"
-        android:layout_width="91dp"
-        android:layout_height="23dp"
+        android:id="@+id/text_interval_question_score"
+        android:layout_width="107dp"
+        android:layout_height="61dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/text_interval_question_test2"
+        android:text="@string/text_interval_question_score"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -3,7 +3,6 @@ package com.example.allears;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,22 +14,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import android.media.AudioManager;
-import android.media.SoundPool;
-
 // TODO: 11/28/20
-// - figure out backstack better, when you answer a question or close just nuke it from the stack??
-// - figure out playing all the sounds, integers -> sounds
 // - make the screen look not absolutely horrible
 //   - find way to have variable number of buttons? currently 4 per every screen
 // - have some sort of delay after you correctly guess before opening new activity??
+// - have it keep track of # right and # wrong for the day
+//   - at each one, append a 1 for a correct, and 0 for incorrect, 2 for skip
+//  -> now have it go into a new drawable type thing, draw blue for correct, red for incorrect
+//     etc. also only parse at most the last 10? idk
+
 
 public class IntervalQuestionActivity extends AppCompatActivity {
 
     // placeholder text, shows numbers that question generation obtained
     // and shows what difficulty was obtained through the intent
-    private TextView testText;
-    private TextView testText2;
+    private TextView difficultySelected;
+    private TextView score;
 
     // the button on top used to repeat the sound
     private Button playAgain;
@@ -60,6 +59,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
     private IntervalPlayer intervalPlayer;
 
+    private boolean guessedWrong;
+    private ArrayList<Integer> record;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +69,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_interval_question);
 
         // TEMPORARY, these views are only to show what data is being transferred
-        testText = (TextView)findViewById(R.id.text_interval_question_test);
-        testText2 = (TextView)findViewById(R.id.text_interval_question_test2);
+        difficultySelected = (TextView)findViewById(R.id.text_interval_question_selected_difficulty);
+        score = (TextView)findViewById(R.id.text_interval_question_score);
 
         // testing interval player (this should be created when question is made)
         intervalPlayer = new IntervalPlayer(this, 0, 1);
@@ -82,6 +84,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         if (diff != null ) {
             difficulty = diff;
         }
+        record = bundle.getIntegerArrayList("record");
 
         // find the play again button, style it a tiny bit
         playAgain = (Button)findViewById(R.id.button_interval_question_repeat);
@@ -100,6 +103,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         button10 = (Button)findViewById(R.id.button_interval_question_b10);
         button11 = (Button)findViewById(R.id.button_interval_question_b11);
 
+        // set guessed wrong to false intially
+        guessedWrong = false;
+
         // call a helper to grey out certain buttons and assign one as the correct answer
         rigButtons();
 
@@ -109,8 +115,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         intervalPlayer.playInterval( 1000 );
 
         // TEMPORARY: set the views to show what data has been transferred
-        testText.setText( "Difficulty selected was:\n" + difficulty );
-        testText2.setText( question.toString() );
+        difficultySelected.setText( "Difficulty: " + difficulty );
+        score.setText( record.toString() );
+        //score.setText( question.toString() );
 
     }
 
@@ -178,7 +185,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
                 break;
 
             case R.id.button_interval_question_new:
-                openNewQuestionSameDifficulty();
+                openNewQuestionSameDifficulty( true );
                 break;
 
 
@@ -232,17 +239,27 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-            openNewQuestionSameDifficulty();
+            openNewQuestionSameDifficulty( false );
         } else {
             Toast.makeText( IntervalQuestionActivity.this, "Incorrect :((", Toast.LENGTH_SHORT).show();
+            this.guessedWrong = true;
         }
     }
 
 
     // a helper to run when the player answers correctly, or starts a new question
-    private void openNewQuestionSameDifficulty() {
+    private void openNewQuestionSameDifficulty( Boolean pressedNextHuh ) {
         Intent intent = new Intent(this, IntervalQuestionActivity.class );
         intent.putExtra( "difficulty", difficulty );
+
+        Integer toAdd = (guessedWrong) ? 0 : 1 ;
+        if (pressedNextHuh) {
+            toAdd = 2;
+        }
+        record.add( toAdd );
+        intent.putExtra( "record", record );
+
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
         startActivity( intent );
     }
 

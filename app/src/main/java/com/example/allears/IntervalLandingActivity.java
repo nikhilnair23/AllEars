@@ -6,6 +6,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class IntervalLandingActivity extends AppCompatActivity {
 
     @Override
@@ -39,6 +41,9 @@ public class IntervalLandingActivity extends AppCompatActivity {
     private void openQuestionDifficulty( String difficulty ) {
         Intent intent = new Intent(this, IntervalQuestionActivity.class );
         intent.putExtra( "difficulty", difficulty );
+        ArrayList<Integer> blankScore = new ArrayList<Integer>();
+        intent.putExtra( "record", blankScore );
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
         startActivity( intent );
     }
 
