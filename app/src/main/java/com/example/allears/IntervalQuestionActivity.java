@@ -231,11 +231,11 @@ public class IntervalQuestionActivity extends AppCompatActivity {
                 break;
 
             case "medium":
-                formMediumQuestion( notes );
+                formEasyOrMediumQuestion( notes );
                 break;
 
             case "hard":
-                formHardQuestion( notes );
+                formEasyMediumOrHardQuestion( notes );
                 break;
         }
 
@@ -250,7 +250,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         int root = notes.get(0);
 
         boolean ascendHuh = rand.nextBoolean();
-        // 0 = octave, 1 = perf 5, 2 = perf 4, 3 = tritone
+        // 0 = octave, 1 = perf 5, 2 = perf 4, 3 = maj2
         int type = rand.nextInt(4);
         int toAdd;
 
@@ -260,28 +260,28 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             case 0:
                 toAdd = (ascendHuh) ? root + 12 : root - 12;
                 notes.add(toAdd);
-                answer = 0;
+                answer = 11;
                 break;
 
             // 1, perfect fifth
             case 1:
                 toAdd = (ascendHuh) ? root + 7 : root - 7;
                 notes.add(toAdd);
-                answer = 1;
+                answer = 6;
                 break;
 
             // 2, perfect fourth
             case 2:
                 toAdd = (ascendHuh) ? root + 5 : root - 5;
                 notes.add(toAdd);
-                answer = 2;
+                answer = 4;
                 break;
 
-            // 3, tritone
+            // 3, maj2
             case 3:
-                toAdd = ( ascendHuh ) ? root + 6  :  root - 6 ;
+                toAdd = ( ascendHuh ) ? root + 2  :  root - 2 ;
                 notes.add( toAdd );
-                answer = 3;
+                answer = 1;
                 break;
 
 
@@ -289,44 +289,69 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     }
 
 
+    private void formEasyOrMediumQuestion( List<Integer> notes ) {
+
+        int variety = rand.nextInt( 2 );
+
+        if (variety == 0) {
+            formEasyQuestion( notes );
+        } else {
+            formMediumQuestion( notes );
+        }
+    }
+
+    private void formEasyMediumOrHardQuestion( List<Integer> notes ) {
+
+        int variety = rand.nextInt( 3 );
+
+        if (variety == 0) {
+            formEasyQuestion( notes );
+        } else if (variety == 1) {
+            formMediumQuestion( notes );
+        } else {
+            formHardQuestion( notes );
+        }
+
+    }
+
 
 
     private void formMediumQuestion( List<Integer> notes ) {
         int root = notes.get(0);
         boolean ascendHuh = rand.nextBoolean();
 
-        // 0 = maj2, 1 = maj3, 2 = maj6, 3 = maj7
+        // 0 = tritone, 1 = maj3, 2 = maj6, 3 = maj7
         int type = rand.nextInt(4);
 
         int toAdd;
         switch (type) {
 
-            // 0, maj2
+            // 0, tritone
             case 0:
-                toAdd = ( ascendHuh ) ? root + 2  :  root - 2 ;
+                toAdd = ( ascendHuh ) ? root + 6  :  root - 6 ;
                 notes.add( toAdd );
-                answer = 0;
+                answer = 5;
                 break;
 
             // 1, maj3
             case 1:
                 toAdd = ( ascendHuh ) ? root + 4  :  root - 4 ;
                 notes.add( toAdd );
-                answer = 1;
+                answer = 3;
                 break;
 
             // 2, maj6
             case 2:
                 toAdd = ( ascendHuh ) ? root + 9  :  root - 9 ;
                 notes.add( toAdd );
-                answer = 2;
+                answer = 8;
                 break;
 
             // 3, maj7
             case 3:
                 toAdd = ( ascendHuh ) ? root + 11  :  root - 11 ;
                 notes.add( toAdd );
-                answer = 3;
+                answer = 11;
                 break;
         }
 
@@ -355,21 +380,21 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             case 1:
                 toAdd = ( ascendHuh ) ? root + 3  :  root - 3 ;
                 notes.add( toAdd );
-                answer = 1;
+                answer = 2;
                 break;
 
             // 2, min6
             case 2:
                 toAdd = ( ascendHuh ) ? root + 8  :  root - 8 ;
                 notes.add( toAdd );
-                answer = 2;
+                answer = 7;
                 break;
 
             // 3, min7
             case 3:
                 toAdd = ( ascendHuh ) ? root + 10  :  root - 10 ;
                 notes.add( toAdd );
-                answer = 3;
+                answer = 9;
                 break;
         }
     }
