@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.media.AudioManager;
+import android.media.SoundPool;
 
 // TODO: 11/28/20
 // - figure out backstack better, when you answer a question or close just nuke it from the stack??
@@ -55,6 +57,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     // determined on question generation. Determines functionality of buttons.
     private int answer;
 
+    private IntervalPlayer intervalPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         // TEMPORARY, these views are only to show what data is being transferred
         testText = (TextView)findViewById(R.id.text_interval_question_test);
         testText2 = (TextView)findViewById(R.id.text_interval_question_test2);
+
+        // testing interval player (this should be created when question is made)
+        intervalPlayer = new IntervalPlayer(this, 0, 1);
 
         // create a random to be used in this
         rand = new Random();
@@ -100,6 +107,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         // TEMPORARY: set the views to show what data has been transferred
         testText.setText( "Difficulty selected was:\n" + difficulty );
         testText2.setText( question.toString() );
+
 
     }
 
@@ -158,6 +166,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
             case R.id.button_interval_question_repeat:
                 Toast.makeText( IntervalQuestionActivity.this, "Pressed play again", Toast.LENGTH_SHORT).show();
+                //intervalPlayer.playInterval(1000);
                 break;
 
             case R.id.button_interval_question_new:
