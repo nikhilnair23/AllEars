@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.interval_training_button:
                 openActivityIntervalLanding();
                 break;
+
         }
     }
 
