@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".IntervalQuestionActivity">
 
-    <Button
-        android:id="@+id/button_interval_question_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="40dp"
-        android:onClick="onClick"
-        android:text="@string/button_generic_back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/text_interval_question_test"
         android:layout_width="150dp"
@@ -37,65 +26,169 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_interval_question_repeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
-        android:onClick="onClick"
-        android:text="@string/button_interval_question_repeat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_interval_question_b0"
-        android:layout_width="wrap_content"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:text="var"
+        android:text="@string/button_interval_question_answer0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b1"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="342dp"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/button_interval_question_b1"
-        android:layout_width="wrap_content"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:text="var"
+        android:text="@string/button_interval_question_answer1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_interval_question_b0"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_interval_question_b2"
-        android:layout_width="wrap_content"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:onClick="onClick"
-        android:text="var"
+        android:text="@string/button_interval_question_answer2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b3"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b1"
+        tools:layout_editor_absoluteY="342dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/button_interval_question_b3"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/button_interval_question_answer3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b2"
+        tools:layout_editor_absoluteY="342dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/button_interval_question_b4"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_interval_question_answer4"
+        app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b0" />
 
     <Button
-        android:id="@+id/button_interval_question_b3"
+        android:id="@+id/button_interval_question_b5"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_interval_question_answer5"
+        app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b2"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b0"
+        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b1" />
+
+    <Button
+        android:id="@+id/button_interval_question_b6"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClick"
+        android:text="@string/button_interval_question_answer6"
+        app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b3"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b1"
+        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b2" />
+
+    <Button
+        android:id="@+id/button_interval_question_b7"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClick"
+        android:text="@string/button_interval_question_answer7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b2"
+        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b3" />
+
+    <Button
+        android:id="@+id/button_interval_question_b8"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_interval_question_answer8"
+        app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b4" />
+
+    <Button
+        android:id="@+id/button_interval_question_b9"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_interval_question_answer9"
+        app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b2"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b0"
+        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b5" />
+
+    <Button
+        android:id="@+id/button_interval_question_b10"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClick"
+        android:text="@string/button_interval_question_answer10"
+        app:layout_constraintEnd_toStartOf="@+id/button_interval_question_b3"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b1"
+        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b6" />
+
+    <Button
+        android:id="@+id/button_interval_question_b11"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClick"
+        android:text="@string/button_interval_question_answer11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b2"
+        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b7" />
+
+
+    <Button
+        android:id="@+id/button_interval_question_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="40dp"
         android:onClick="onClick"
-        android:text="var"
+        android:text="@string/button_generic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/button_interval_question_repeat"
+        android:layout_width="108dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="156dp"
+        android:onClick="onClick"
+        android:text="@string/button_interval_question_repeat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button_interval_question_b2"
-        app:layout_constraintTop_toBottomOf="@+id/button_interval_question_b1" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_interval_question_new"
@@ -107,5 +200,6 @@
         android:text="@string/button_interval_question_new"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

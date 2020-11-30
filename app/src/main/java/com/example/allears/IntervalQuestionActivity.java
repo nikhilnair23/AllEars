@@ -3,6 +3,7 @@ package com.example.allears;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,10 +27,20 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     private TextView testText;
     private TextView testText2;
 
+    private Button playAgain;
+
     private Button button0;
     private Button button1;
     private Button button2;
     private Button button3;
+    private Button button4;
+    private Button button5;
+    private Button button6;
+    private Button button7;
+    private Button button8;
+    private Button button9;
+    private Button button10;
+    private Button button11;
 
     private String difficulty;
     private Random rand;
@@ -54,43 +65,78 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             difficulty = diff;
         }
 
+        playAgain = (Button)findViewById(R.id.button_interval_question_repeat);
+        playAgain.setBackgroundColor( Color.CYAN);
+
         button0 = (Button)findViewById(R.id.button_interval_question_b0);
         button1 = (Button)findViewById(R.id.button_interval_question_b1);
         button2 = (Button)findViewById(R.id.button_interval_question_b2);
         button3 = (Button)findViewById(R.id.button_interval_question_b3);
+        button4 = (Button)findViewById(R.id.button_interval_question_b4);
+        button5 = (Button)findViewById(R.id.button_interval_question_b5);
+        button6 = (Button)findViewById(R.id.button_interval_question_b6);
+        button7 = (Button)findViewById(R.id.button_interval_question_b7);
+        button8 = (Button)findViewById(R.id.button_interval_question_b8);
+        button9 = (Button)findViewById(R.id.button_interval_question_b9);
+        button10 = (Button)findViewById(R.id.button_interval_question_b10);
+        button11 = (Button)findViewById(R.id.button_interval_question_b11);
 
         populateButtonText();
 
         testText.setText( "Difficulty selected was:\n" + difficulty );
-
         testText2.setText( getQuestionNotes().toString() );
     }
 
     private void populateButtonText() {
         switch( difficulty ) {
             case "easy":
-                button0.setText( "Octave" );
-                button1.setText( "5th" );
-                button2.setText( "4th" );
-                button3.setText( "Tritone" );
-                // CAN USE THIS TO HIDE BUTTONS
-                // button3.setVisibility( View.INVISIBLE );
+                // populateEasyButtons();
+                greyMediumButtons();
+                greyHardButtons();
                 break;
 
             case "medium":
-                button0.setText( "Maj2" );
-                button1.setText( "Maj3" );
-                button2.setText( "Maj6" );
-                button3.setText( "Maj7" );
+                // populateEasyButtons();
+                // populateMediumButtons();
+                greyHardButtons();
                 break;
 
             case "hard":
-                button0.setText( "Min2" );
-                button1.setText( "Min3" );
-                button2.setText( "Min6" );
-                button3.setText( "Min7" );
+                // populateEasyButtons();
+                // populateMediumButtons();
+                // populateHardButtons();
                 break;
         }
+    }
+
+
+    private void greyMediumButtons() {
+        greyOut( button1 );
+        greyOut( button5 );
+        greyOut( button8 );
+        greyOut( button10 );
+
+//        button1.setTextColor( Color.DKGRAY );
+//        button5.setVisibility( View.INVISIBLE );
+//        button8.setVisibility( View.INVISIBLE );
+//        button10.setVisibility( View.INVISIBLE );
+    }
+
+    private void greyHardButtons() {
+        greyOut( button0 );
+        greyOut( button2 );
+        greyOut( button7 );
+        greyOut( button9 );
+
+//        button8.setText( "Min2" );
+//        button9.setText( "Min3" );
+//        button10.setText( "Min6" );
+//        button11.setText( "Min7" );
+    }
+
+    private void greyOut( Button button ) {
+        button.setBackgroundColor(Color.argb(100, 255, 255, 255));
+        button.setBackgroundColor( Color.GRAY );
     }
 
 
@@ -110,21 +156,42 @@ public class IntervalQuestionActivity extends AppCompatActivity {
                 break;
 
 
-                // pass to helper to check if answered correctly or not
+                // pass to helper to check if answered correctly or not??
             case R.id.button_interval_question_b0:
                 answerCorrectHuh( 0 );
                 break;
-
             case R.id.button_interval_question_b1:
                 answerCorrectHuh( 1 );
                 break;
-
             case R.id.button_interval_question_b2:
                 answerCorrectHuh( 2 );
                 break;
-
             case R.id.button_interval_question_b3:
                 answerCorrectHuh( 3 );
+                break;
+            case R.id.button_interval_question_b4:
+                answerCorrectHuh( 4 );
+                break;
+            case R.id.button_interval_question_b5:
+                answerCorrectHuh( 5 );
+                break;
+            case R.id.button_interval_question_b6:
+                answerCorrectHuh( 6 );
+                break;
+            case R.id.button_interval_question_b7:
+                answerCorrectHuh( 7 );
+                break;
+            case R.id.button_interval_question_b8:
+                answerCorrectHuh( 8 );
+                break;
+            case R.id.button_interval_question_b9:
+                answerCorrectHuh( 9 );
+                break;
+            case R.id.button_interval_question_b10:
+                answerCorrectHuh( 10 );
+                break;
+            case R.id.button_interval_question_b11:
+                answerCorrectHuh( 11 );
                 break;
         }
     }
