@@ -77,7 +77,6 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         // find the play again button, style it a tiny bit
         playAgain = (Button)findViewById(R.id.button_interval_question_repeat);
-        playAgain.setBackgroundColor( Color.CYAN);
 
         // find all of the buttons in the grid for use
         button0 = (Button)findViewById(R.id.button_interval_question_b0);
@@ -125,6 +124,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     }
 
 
+
     // call helper on the buttons related to "medium" difficulty
     private void greyMediumButtons() {
         greyOut( button1 );
@@ -143,8 +143,11 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
     // change background color and color of text
     private void greyOut( Button button ) {
-        button.setBackgroundColor(Color.argb(100, 255, 255, 255));
-        button.setBackgroundColor( Color.GRAY );
+        // button.setBackgroundColor(Color.argb(100, 255, 255, 255));
+        button.setTextColor(getResources().getColor( R.color.colorButtonTestTwo ));
+        button.setBackgroundColor( getResources().getColor( R.color.colorButtonTestTwo) );
+        button.setHighlightColor( getResources().getColor( R.color.colorButtonTestTwo) );
+        // button.setVisibility( View.INVISIBLE );
     }
 
 
@@ -270,32 +273,32 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         switch (type) {
 
-            // 0, octave
+            // 0, octave -  12 semitones
             case 0:
                 toAdd = (ascendHuh) ? root + 12 : root - 12;
                 notes.add(toAdd);
                 answer = 11;
                 break;
 
-            // 1, perfect fifth
+            // 1, perfect fifth - 7 semitones
             case 1:
                 toAdd = (ascendHuh) ? root + 7 : root - 7;
                 notes.add(toAdd);
                 answer = 6;
                 break;
 
-            // 2, perfect fourth
+            // 2, perfect fourth - 5 semitones
             case 2:
                 toAdd = (ascendHuh) ? root + 5 : root - 5;
                 notes.add(toAdd);
                 answer = 4;
                 break;
 
-            // 3, maj2
+            // 3, maj2 - 4 semitones
             case 3:
-                toAdd = ( ascendHuh ) ? root + 2  :  root - 2 ;
+                toAdd = ( ascendHuh ) ? root + 4  :  root - 4 ;
                 notes.add( toAdd );
-                answer = 1;
+                answer = 3;
                 break;
 
 
@@ -340,32 +343,32 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         int toAdd;
         switch (type) {
 
-            // 0, tritone
+            // 0, tritone -  6 semitones
             case 0:
                 toAdd = ( ascendHuh ) ? root + 6  :  root - 6 ;
                 notes.add( toAdd );
                 answer = 5;
                 break;
 
-            // 1, maj3
+            // 1, maj2 - 2 semitones
             case 1:
-                toAdd = ( ascendHuh ) ? root + 4  :  root - 4 ;
+                toAdd = ( ascendHuh ) ? root + 2  :  root - 2 ;
                 notes.add( toAdd );
-                answer = 3;
+                answer = 1;
                 break;
 
-            // 2, maj6
+            // 2, maj6 -  9 semitones
             case 2:
                 toAdd = ( ascendHuh ) ? root + 9  :  root - 9 ;
                 notes.add( toAdd );
                 answer = 8;
                 break;
 
-            // 3, maj7
+            // 3, maj7 -  11 semitones
             case 3:
                 toAdd = ( ascendHuh ) ? root + 11  :  root - 11 ;
                 notes.add( toAdd );
-                answer = 11;
+                answer = 10;
                 break;
         }
 
