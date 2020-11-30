@@ -17,18 +17,22 @@ import java.util.Random;
 
 // TODO: 11/28/20
 // - figure out backstack better, when you answer a question or close just nuke it from the stack??
-// - figure out playing all the sounds, have random list of two integers to create intervals
+// - figure out playing all the sounds, integers -> sounds
 // - make the screen look not absolutely horrible
 //   - find way to have variable number of buttons? currently 4 per every screen
 // - have some sort of delay after you correctly guess before opening new activity??
 
 public class IntervalQuestionActivity extends AppCompatActivity {
 
+    // placeholder text, shows numbers that question generation obtained
+    // and shows what difficulty was obtained through the intent
     private TextView testText;
     private TextView testText2;
 
+    // the button on top used to repeat the sound
     private Button playAgain;
 
+    // the grid of buttons for use in answers
     private Button button0;
     private Button button1;
     private Button button2;
@@ -42,9 +46,13 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     private Button button10;
     private Button button11;
 
+    // string obtained through intent from IntervalLanding activity, drives question generation
     private String difficulty;
+
+    // a random to use in creation of questions
     private Random rand;
 
+    // determined on question generation. Determines functionality of buttons.
     private int answer;
 
 
@@ -53,21 +61,25 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interval_question);
 
+        // TEMPORARY, these views are only to show what data is being transferred
         testText = (TextView)findViewById(R.id.text_interval_question_test);
         testText2 = (TextView)findViewById(R.id.text_interval_question_test2);
 
+        // create a random to be used in this
         rand = new Random();
 
+        // get the difficulty from the intent, if not null set it
         Bundle bundle = getIntent().getExtras();
         String diff = bundle.getString("difficulty");
-
         if (diff != null ) {
             difficulty = diff;
         }
 
+        // find the play again button, style it a tiny bit
         playAgain = (Button)findViewById(R.id.button_interval_question_repeat);
         playAgain.setBackgroundColor( Color.CYAN);
 
+        // find all of the buttons in the grid for use
         button0 = (Button)findViewById(R.id.button_interval_question_b0);
         button1 = (Button)findViewById(R.id.button_interval_question_b1);
         button2 = (Button)findViewById(R.id.button_interval_question_b2);
@@ -81,63 +93,60 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         button10 = (Button)findViewById(R.id.button_interval_question_b10);
         button11 = (Button)findViewById(R.id.button_interval_question_b11);
 
-        populateButtonText();
+        // call a helper to grey out certain buttons and assign one as the correct answer
+        rigButtons();
+        List<Integer> question = getQuestionNotes();
 
+        // TEMPORARY: set the views to show what data has been transferred
         testText.setText( "Difficulty selected was:\n" + difficulty );
-        testText2.setText( getQuestionNotes().toString() );
+        testText2.setText( question.toString() );
+
     }
 
-    private void populateButtonText() {
+
+    // a private helper method to grey out certain buttons based on difficulty, and to generate
+    //   a question and assign one button as the correct answer
+    private void rigButtons() {
+
+        // switch for difficulty
         switch( difficulty ) {
             case "easy":
-                // populateEasyButtons();
                 greyMediumButtons();
                 greyHardButtons();
                 break;
 
             case "medium":
-                // populateEasyButtons();
-                // populateMediumButtons();
                 greyHardButtons();
                 break;
 
             case "hard":
-                // populateEasyButtons();
-                // populateMediumButtons();
-                // populateHardButtons();
                 break;
         }
     }
 
 
+    // call helper on the buttons related to "medium" difficulty
     private void greyMediumButtons() {
         greyOut( button1 );
         greyOut( button5 );
         greyOut( button8 );
         greyOut( button10 );
-
-//        button1.setTextColor( Color.DKGRAY );
-//        button5.setVisibility( View.INVISIBLE );
-//        button8.setVisibility( View.INVISIBLE );
-//        button10.setVisibility( View.INVISIBLE );
     }
 
+    // call helper on the buttons related to "hard" difficulty
     private void greyHardButtons() {
         greyOut( button0 );
         greyOut( button2 );
         greyOut( button7 );
         greyOut( button9 );
-
-//        button8.setText( "Min2" );
-//        button9.setText( "Min3" );
-//        button10.setText( "Min6" );
-//        button11.setText( "Min7" );
     }
 
+    // change background color and color of text
     private void greyOut( Button button ) {
         button.setBackgroundColor(Color.argb(100, 255, 255, 255));
         button.setBackgroundColor( Color.GRAY );
     }
+
 
 
     public void onClick(View view) {
@@ -196,6 +205,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         }
     }
 
+
+    // check if the button is correct, perform proper action
     private void answerCorrectHuh( int button ) {
         if ( button == answer ) {
             Toast.makeText( IntervalQuestionActivity.this, "Correct!", Toast.LENGTH_SHORT).show();
@@ -210,6 +221,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         }
     }
 
+
+    // a helper to run when the player answers correctly, or starts a new question
     private void openNewQuestionSameDifficulty() {
         Intent intent = new Intent(this, IntervalQuestionActivity.class );
         intent.putExtra( "difficulty", difficulty );
@@ -217,6 +230,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     }
 
 
+    // runs a switch
     private List<Integer> getQuestionNotes() {
         ArrayList<Integer> notes = new ArrayList<Integer>();
 
