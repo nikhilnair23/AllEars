@@ -102,12 +102,15 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         // call a helper to grey out certain buttons and assign one as the correct answer
         rigButtons();
+
+        // get the question
         List<Integer> question = getQuestionNotes();
+        intervalPlayer = new IntervalPlayer( this, question.get( 0 ), question.get( 1 ) );
+        intervalPlayer.playInterval( 1000 );
 
         // TEMPORARY: set the views to show what data has been transferred
         testText.setText( "Difficulty selected was:\n" + difficulty );
         testText2.setText( question.toString() );
-
 
     }
 
@@ -171,6 +174,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             case R.id.button_interval_question_repeat:
                 Toast.makeText( IntervalQuestionActivity.this, "Pressed play again", Toast.LENGTH_SHORT).show();
                 //intervalPlayer.playInterval(1000);
+                intervalPlayer.playInterval( 1000 );
                 break;
 
             case R.id.button_interval_question_new:
@@ -249,7 +253,10 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         // so here we are going to determine the root, choose a random note in the middle two octaves
         // using 25 currently, to be pretty much 2 octaves
-        int root = rand.nextInt(25) + 24;
+
+        //int root = rand.nextInt(25) + 24;
+        // TODO hard coding this right now, need to add more notes?
+        int root = rand.nextInt(14);
         notes.add( root );
 
         switch ( difficulty ) {
@@ -277,11 +284,15 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         ArrayList<Integer> possibilities = new ArrayList<>(
                 Arrays.asList( 2, 4, 5, 7, 3, 6, 9, 11, 12, 1, 8, 10 ));
 
+        // TODO add support for possibly 3 octaves, and up and down
         int root = notes.get( 0 );
-        boolean ascendHuh = rand.nextBoolean();
+
+        // only going up
+        boolean ascendHuh = true;
+        // boolean ascendHuh = rand.nextBoolean();
 
         int boundedVal = possibilities.get( rand.nextInt( bound ));
-        int toAdd = ( ascendHuh ) ? root + boundedVal : root - boundedVal ;
+        int toAdd = ( ascendHuh ) ? boundedVal : - boundedVal ;
         notes.add( toAdd );
         answer = boundedVal - 1;
 
