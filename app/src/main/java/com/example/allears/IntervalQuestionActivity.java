@@ -64,7 +64,6 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         testText.setText( "Difficulty selected was:\n" + difficulty );
 
         testText2.setText( getQuestionNotes().toString() );
-
     }
 
     private void populateButtonText() {
@@ -74,6 +73,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
                 button1.setText( "5th" );
                 button2.setText( "4th" );
                 button3.setText( "Tritone" );
+                // CAN USE THIS TO HIDE BUTTONS
+                // button3.setVisibility( View.INVISIBLE );
                 break;
 
             case "medium":
