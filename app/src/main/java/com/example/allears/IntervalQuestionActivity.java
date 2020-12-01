@@ -23,6 +23,9 @@ import java.util.Random;
 //  -> now have it go into a new drawable type thing, draw blue for correct, red for incorrect
 //     etc. also only parse at most the last 10? idk
 
+// - really need to figure out something for the buttons, want a couple custom styles
+//  -> because overriding them as grey adds the stupid full rectangle, no padding or anything
+
 
 public class IntervalQuestionActivity extends AppCompatActivity {
 
