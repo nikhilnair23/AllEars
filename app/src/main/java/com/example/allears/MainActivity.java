@@ -1,10 +1,10 @@
 package com.example.allears;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,12 +23,20 @@ public class MainActivity extends AppCompatActivity {
                 openActivityIntervalLanding();
                 break;
 
+            case R.id.main_login_button:
+                openLoginActivity();
+                break;
         }
     }
 
 
     private void openActivityIntervalLanding() {
         Intent intent = new Intent(this, IntervalLandingActivity.class );
+        startActivity( intent );
+    }
+
+    private void openLoginActivity(){
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity( intent );
     }
 
