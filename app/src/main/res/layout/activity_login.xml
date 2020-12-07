@@ -48,6 +48,7 @@
         android:id="@+id/login_screen_sign_up_button"
         android:layout_width="103dp"
         android:layout_height="38dp"
+        android:onClick="onClick"
         android:text="Sign Up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

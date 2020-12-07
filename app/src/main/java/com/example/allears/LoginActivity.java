@@ -1,5 +1,6 @@
 package com.example.allears;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,7 +17,15 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.login_screen_sign_up_button:
+                openSignUpActivity();
+                break;
 
         }
+    }
+
+    private void openSignUpActivity(){
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 }
