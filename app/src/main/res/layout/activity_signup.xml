@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.421" />
 
     <EditText
-        android:id="@+id/textView5"
+        android:id="@+id/confirm_password_text"
         android:layout_width="203dp"
         android:layout_height="43dp"
         android:background="@drawable/borderbottom"

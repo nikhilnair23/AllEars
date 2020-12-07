@@ -120,6 +120,4 @@ public class LoginActivity extends AppCompatActivity {
         // otherwise, we're totally good
         return text;
     }
-
-
 }

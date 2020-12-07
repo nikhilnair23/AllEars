@@ -25,6 +25,7 @@ import java.util.Set;
 public class SignUpActivity extends AppCompatActivity {
     private EditText usernameText;
     private EditText passwordText;
+    private EditText confirmPasswordText;
     private DatabaseReference mDatabase;
     private DatabaseReference usersRef;
     private Set<String> users;
@@ -36,6 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         usernameText = findViewById(R.id.username_text);
         passwordText = findViewById(R.id.password_text);
+        confirmPasswordText = findViewById(R.id.confirm_password_text);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         usersRef = mDatabase.child("Users");
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -65,9 +67,15 @@ public class SignUpActivity extends AppCompatActivity {
         // check username, password cannot be null and may not have spaces
         final String usernameChecked = checkNullString(usernameText.getText().toString());
         final String password = checkNullString(passwordText.getText().toString());
+        final String confirmPassword = checkNullString(confirmPasswordText.getText().toString());
 
         if (usernameChecked == null || password == null) {
             Toast.makeText(this, "Entries may not be null, and may not have spaces!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!password.equals(confirmPassword)){
+            Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -107,9 +115,6 @@ public class SignUpActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
-
 
     private String checkNullString(String text) {
 
