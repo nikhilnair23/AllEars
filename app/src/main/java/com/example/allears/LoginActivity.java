@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private Set<String> users;
     private EditText usernameText;
     private EditText passwordText;
+    private DBHelper dbHelper;
     private static final String TAG = LoginActivity.class.getSimpleName();
 
 
@@ -86,15 +87,16 @@ public class LoginActivity extends AppCompatActivity {
                         if(userObj.getUsername().equals(username)){
                             if(!password.equals(userObj.getPassword())){
                                 Toast.makeText(getApplicationContext(), "Password doesn't match", Toast.LENGTH_LONG).show();
-                                return;
                             }
                             else{
                                 // TODO: save username to localDB
+                                dbHelper.inserttoDB(username);
                                 finish();
-                                return;
                             }
+                            return;
                         }
                     }
+                    Toast.makeText(getApplicationContext(), "Username/Password doesn't match", Toast.LENGTH_LONG).show();
                 }
             }
 
