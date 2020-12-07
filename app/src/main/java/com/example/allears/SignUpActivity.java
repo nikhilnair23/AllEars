@@ -16,12 +16,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class SignUpActivity extends AppCompatActivity {
     private EditText usernameText;
     private EditText passwordText;
     private DatabaseReference mDatabase;
+    private DatabaseReference usersRef;
+    private Set<String> users;
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
@@ -31,6 +37,25 @@ public class SignUpActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.username_text);
         passwordText = findViewById(R.id.password_text);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        usersRef = mDatabase.child("Users");
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                users = new HashSet<>();
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String username = ds.child("username").getValue(String.class);
+                    users.add(username);
+                }
+                System.out.println(users);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        usersRef.addListenerForSingleValueEvent(valueEventListener);
+
+
+
     }
 
 
@@ -43,6 +68,11 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (usernameChecked == null) {
             Toast.makeText(this, "Entries may not be null, and may not have spaces!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (users.contains(usernameChecked)){
+            Toast.makeText(this, "Username is already taken", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -68,6 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     public void onClick(View view){
         switch (view.getId()){
