@@ -66,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
         final String usernameChecked = checkNullString(usernameText.getText().toString());
         final String password = checkNullString(passwordText.getText().toString());
 
-        if (usernameChecked == null) {
+        if (usernameChecked == null || password == null) {
             Toast.makeText(this, "Entries may not be null, and may not have spaces!", Toast.LENGTH_LONG).show();
             return;
         }
