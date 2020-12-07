@@ -17,18 +17,23 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.chord_training_button:
+                openActivityChordLanding();
                 break;
 
             case R.id.interval_training_button:
                 openActivityIntervalLanding();
                 break;
-
         }
     }
 
 
     private void openActivityIntervalLanding() {
         Intent intent = new Intent(this, IntervalLandingActivity.class );
+        startActivity( intent );
+    }
+
+    private void openActivityChordLanding() {
+        Intent intent = new Intent(this, ChordLandingActivity.class );
         startActivity( intent );
     }
 

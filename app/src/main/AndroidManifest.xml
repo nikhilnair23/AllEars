@@ -9,8 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".IntervalQuestionActivity"></activity>
-        <activity android:name=".IntervalLandingActivity"></activity>
+        <activity android:name=".ChordQuestionActivity"></activity>
+        <activity android:name=".ChordLandingActivity" />
+        <activity android:name=".IntervalQuestionActivity" />
+        <activity android:name=".IntervalLandingActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

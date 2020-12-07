@@ -31,9 +31,26 @@
     <string name="button_interval_question_answer11">Oct</string>
 
 
+    <!-- Interval Landing Activity Strings -->
+    <string name="button_chord_landing_easy">Easy</string>
+    <string name="button_chord_landing_medium">Medium</string>
+    <string name="button_chord_landing_hard">Hard</string>
 
 
+    <!-- Chord Question Activity Strings -->
+    <string name="text_chord_question_selected_difficulty">Difficulty: </string>
+    <string name="text_chord_question_score">Total: \nCorrect: \nIncorrect: </string>
+    <string name="button_chord_question_repeat">Play Again</string>
+    <string name="button_chord_question_new">New Question</string>
 
+    <string name="button_chord_question_answer0">Maj Triad</string>
+    <string name="button_chord_question_answer1">Min Triad</string>
+    <string name="button_chord_question_answer2">Maj 7th</string>
+    <string name="button_chord_question_answer3">Min 7th</string>
+    <string name="button_chord_question_answer4">Dom 7th</string>
+    <string name="button_chord_question_answer5">Min7b5</string>
+    <string name="button_chord_question_answer6">TEMP</string>
+    <string name="button_chord_question_answer7">TEMP</string>
 
 
 
