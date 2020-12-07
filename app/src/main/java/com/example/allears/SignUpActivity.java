@@ -62,7 +62,9 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed,
                                            @Nullable DataSnapshot currentData) {
-                        Log.d(TAG, "postTransaction:onComplete:" + error);
+                        Log.d(TAG, "postTransaction:onComplete:" + currentData);
+                        Toast.makeText(getApplicationContext(), "Sign up successful!", Toast.LENGTH_LONG);
+                        finish();
                     }
                 });
     }
