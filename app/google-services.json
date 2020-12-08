@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "828036384826",
+    "project_id": "allears-54fc9",
+    "storage_bucket": "allears-54fc9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828036384826:android:9649de907470e7d0d78d03",
+        "android_client_info": {
+          "package_name": "com.example.allears"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828036384826-mes7jj9l3hfhi78hal7df407qca0o6hs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2Il2CF7ffXJf_fjLCmq_KRsHPpssEuNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "828036384826-mes7jj9l3hfhi78hal7df407qca0o6hs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
