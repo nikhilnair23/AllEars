@@ -10,31 +10,60 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-
 // TODO: 11/28/20
-// - figure out backstack better, when you answer a question or close just nuke it from the stack??
-// - figure out playing all the sounds, have random list of two integers to create intervals
 // - make the screen look not absolutely horrible
 //   - find way to have variable number of buttons? currently 4 per every screen
 // - have some sort of delay after you correctly guess before opening new activity??
+// - have it keep track of # right and # wrong for the day
+//   - at each one, append a 1 for a correct, and 0 for incorrect, 2 for skip
+//  -> now have it go into a new drawable type thing, draw blue for correct, red for incorrect
+//     etc. also only parse at most the last 10? idk
+
+// - really need to figure out something for the buttons, want a couple custom styles
+//  -> because overriding them as grey adds the stupid full rectangle, no padding or anything
+
 
 public class IntervalQuestionActivity extends AppCompatActivity {
 
-    private TextView testText;
-    private TextView testText2;
+    // placeholder text, shows numbers that question generation obtained
+    // and shows what difficulty was obtained through the intent
+    private TextView difficultySelected;
+    private TextView score;
 
+    // the button on top used to repeat the sound
+    private Button playAgain;
+
+    // the grid of buttons for use in answers
     private Button button0;
     private Button button1;
     private Button button2;
     private Button button3;
+    private Button button4;
+    private Button button5;
+    private Button button6;
+    private Button button7;
+    private Button button8;
+    private Button button9;
+    private Button button10;
+    private Button button11;
 
+    // string obtained through intent from IntervalLanding activity, drives question generation
     private String difficulty;
+
+    // a random to use in creation of questions
     private Random rand;
 
+    // determined on question generation. Determines functionality of buttons.
     private int answer;
+
+    private IntervalPlayer intervalPlayer;
+
+    private boolean guessedWrong;
+    private ArrayList<Integer> record;
 
 
     @Override
@@ -42,55 +71,107 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interval_question);
 
-        testText = (TextView)findViewById(R.id.text_interval_question_test);
-        testText2 = (TextView)findViewById(R.id.text_interval_question_test2);
+        // TEMPORARY, these views are only to show what data is being transferred
+        difficultySelected = (TextView)findViewById(R.id.text_interval_question_selected_difficulty);
+        score = (TextView)findViewById(R.id.text_interval_question_score);
 
+        // testing interval player (this should be created when question is made)
+        intervalPlayer = new IntervalPlayer(this, 0, 1);
+
+        // create a random to be used in this
         rand = new Random();
 
+        // get the difficulty from the intent, if not null set it
         Bundle bundle = getIntent().getExtras();
         String diff = bundle.getString("difficulty");
-
         if (diff != null ) {
             difficulty = diff;
         }
+        record = bundle.getIntegerArrayList("record");
 
+        // find the play again button, style it a tiny bit
+        playAgain = (Button)findViewById(R.id.button_interval_question_repeat);
+
+        // find all of the buttons in the grid for use
         button0 = (Button)findViewById(R.id.button_interval_question_b0);
         button1 = (Button)findViewById(R.id.button_interval_question_b1);
         button2 = (Button)findViewById(R.id.button_interval_question_b2);
         button3 = (Button)findViewById(R.id.button_interval_question_b3);
+        button4 = (Button)findViewById(R.id.button_interval_question_b4);
+        button5 = (Button)findViewById(R.id.button_interval_question_b5);
+        button6 = (Button)findViewById(R.id.button_interval_question_b6);
+        button7 = (Button)findViewById(R.id.button_interval_question_b7);
+        button8 = (Button)findViewById(R.id.button_interval_question_b8);
+        button9 = (Button)findViewById(R.id.button_interval_question_b9);
+        button10 = (Button)findViewById(R.id.button_interval_question_b10);
+        button11 = (Button)findViewById(R.id.button_interval_question_b11);
 
-        populateButtonText();
+        // set guessed wrong to false intially
+        guessedWrong = false;
 
-        testText.setText( "Difficulty selected was:\n" + difficulty );
+        // call a helper to grey out certain buttons and assign one as the correct answer
+        rigButtons();
 
-        testText2.setText( getQuestionNotes().toString() );
+        // get the question
+        List<Integer> question = getQuestionNotes();
+        intervalPlayer = new IntervalPlayer( this, question.get( 0 ), question.get( 1 ) );
+        intervalPlayer.playInterval( 1000 );
+
+        // TEMPORARY: set the views to show what data has been transferred
+        difficultySelected.setText( "Difficulty: " + difficulty );
+        score.setText( record.toString() );
+        //score.setText( question.toString() );
 
     }
 
-    private void populateButtonText() {
+
+    // a private helper method to grey out certain buttons based on difficulty, and to generate
+    //   a question and assign one button as the correct answer
+    private void rigButtons() {
+
+        // switch for difficulty
         switch( difficulty ) {
             case "easy":
-                button0.setText( "Octave" );
-                button1.setText( "5th" );
-                button2.setText( "4th" );
-                button3.setText( "Tritone" );
+                greyMediumButtons();
+                greyHardButtons();
                 break;
 
             case "medium":
-                button0.setText( "Maj2" );
-                button1.setText( "Maj3" );
-                button2.setText( "Maj6" );
-                button3.setText( "Maj7" );
+                greyHardButtons();
                 break;
 
             case "hard":
-                button0.setText( "Min2" );
-                button1.setText( "Min3" );
-                button2.setText( "Min6" );
-                button3.setText( "Min7" );
                 break;
         }
     }
+
+
+
+    // call helper on the buttons related to "medium" difficulty
+    private void greyMediumButtons() {
+        greyOut( button2 );
+        greyOut( button5 );
+        greyOut( button8 );
+        greyOut( button10 );
+        greyOut( button11 );
+    }
+
+    // call helper on the buttons related to "hard" difficulty
+    private void greyHardButtons() {
+        greyOut( button0 );
+        greyOut( button7 );
+        greyOut( button9 );
+    }
+
+    // change background color and color of text
+    private void greyOut( Button button ) {
+        // button.setBackgroundColor(Color.argb(100, 255, 255, 255));
+        button.setTextColor(getResources().getColor( R.color.colorButtonTestTwo ));
+        button.setBackgroundColor( getResources().getColor( R.color.colorButtonTestTwo) );
+        button.setHighlightColor( getResources().getColor( R.color.colorButtonTestTwo) );
+        // button.setVisibility( View.INVISIBLE );
+    }
+
 
 
     public void onClick(View view) {
@@ -102,32 +183,57 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
             case R.id.button_interval_question_repeat:
                 Toast.makeText( IntervalQuestionActivity.this, "Pressed play again", Toast.LENGTH_SHORT).show();
+                //intervalPlayer.playInterval(1000);
+                intervalPlayer.playInterval( 1000 );
                 break;
 
             case R.id.button_interval_question_new:
-                openNewQuestionSameDifficulty();
+                openNewQuestionSameDifficulty( true );
                 break;
 
 
-                // pass to helper to check if answered correctly or not
+                // pass to helper to check if answered correctly or not??
             case R.id.button_interval_question_b0:
                 answerCorrectHuh( 0 );
                 break;
-
             case R.id.button_interval_question_b1:
                 answerCorrectHuh( 1 );
                 break;
-
             case R.id.button_interval_question_b2:
                 answerCorrectHuh( 2 );
                 break;
-
             case R.id.button_interval_question_b3:
                 answerCorrectHuh( 3 );
+                break;
+            case R.id.button_interval_question_b4:
+                answerCorrectHuh( 4 );
+                break;
+            case R.id.button_interval_question_b5:
+                answerCorrectHuh( 5 );
+                break;
+            case R.id.button_interval_question_b6:
+                answerCorrectHuh( 6 );
+                break;
+            case R.id.button_interval_question_b7:
+                answerCorrectHuh( 7 );
+                break;
+            case R.id.button_interval_question_b8:
+                answerCorrectHuh( 8 );
+                break;
+            case R.id.button_interval_question_b9:
+                answerCorrectHuh( 9 );
+                break;
+            case R.id.button_interval_question_b10:
+                answerCorrectHuh( 10 );
+                break;
+            case R.id.button_interval_question_b11:
+                answerCorrectHuh( 11 );
                 break;
         }
     }
 
+
+    // check if the button is correct, perform proper action
     private void answerCorrectHuh( int button ) {
         if ( button == answer ) {
             Toast.makeText( IntervalQuestionActivity.this, "Correct!", Toast.LENGTH_SHORT).show();
@@ -136,173 +242,80 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-            openNewQuestionSameDifficulty();
+            openNewQuestionSameDifficulty( false );
         } else {
             Toast.makeText( IntervalQuestionActivity.this, "Incorrect :((", Toast.LENGTH_SHORT).show();
+            this.guessedWrong = true;
         }
     }
 
-    private void openNewQuestionSameDifficulty() {
+
+    // a helper to run when the player answers correctly, or starts a new question
+    private void openNewQuestionSameDifficulty( Boolean pressedNextHuh ) {
         Intent intent = new Intent(this, IntervalQuestionActivity.class );
         intent.putExtra( "difficulty", difficulty );
+
+        Integer toAdd = (guessedWrong) ? 0 : 1 ;
+        if (pressedNextHuh) {
+            toAdd = 2;
+        }
+        record.add( toAdd );
+        intent.putExtra( "record", record );
+
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
         startActivity( intent );
     }
 
 
+    // runs a switch
     private List<Integer> getQuestionNotes() {
         ArrayList<Integer> notes = new ArrayList<Integer>();
 
         // so here we are going to determine the root, choose a random note in the middle two octaves
         // using 25 currently, to be pretty much 2 octaves
-        int root = rand.nextInt(25) + 24;
+
+        //int root = rand.nextInt(25) + 24;
+        // TODO hard coding this right now, need to add more notes?
+        int root = rand.nextInt(14);
         notes.add( root );
 
         switch ( difficulty ) {
             case "easy":
-                formEasyQuestion( notes );
+                generateQuestionGivenBound( notes, 4 );
                 break;
-
             case "medium":
-                formMediumQuestion( notes );
+                generateQuestionGivenBound( notes, 9 );
                 break;
-
             case "hard":
-                formHardQuestion( notes );
+                generateQuestionGivenBound( notes, 12 );
                 break;
         }
-
         return notes;
     }
 
 
 
+    // generates an interval by placing possibilities in an array and indexing a random one
+    //   based on difficulty
+    private void generateQuestionGivenBound( ArrayList<Integer> notes, int bound ) {
 
-    // defining easy as octave, or fifth, or fourth
-    private void formEasyQuestion( List<Integer> notes ) {
-        int root = notes.get(0);
+        // all of the possible values in order of difficulty, by index:
+        //   easy   -> (0, 4) ; medium -> (0, 9) ; hard -> (0, 12)
+        ArrayList<Integer> possibilities = new ArrayList<>(
+                Arrays.asList( 2, 4, 5, 7, 3, 6, 9, 11, 12, 1, 8, 10 ));
 
-        boolean ascendHuh = rand.nextBoolean();
-        // 0 = octave, 1 = perf 5, 2 = perf 4, 3 = tritone
-        int type = rand.nextInt(4);
-        int toAdd;
+        // TODO add support for possibly 3 octaves, and up and down
+        int root = notes.get( 0 );
 
-        switch (type) {
+        // only going up
+        boolean ascendHuh = true;
+        // boolean ascendHuh = rand.nextBoolean();
 
-            // 0, octave
-            case 0:
-                toAdd = (ascendHuh) ? root + 12 : root - 12;
-                notes.add(toAdd);
-                answer = 0;
-                break;
-
-            // 1, perfect fifth
-            case 1:
-                toAdd = (ascendHuh) ? root + 7 : root - 7;
-                notes.add(toAdd);
-                answer = 1;
-                break;
-
-            // 2, perfect fourth
-            case 2:
-                toAdd = (ascendHuh) ? root + 5 : root - 5;
-                notes.add(toAdd);
-                answer = 2;
-                break;
-
-            // 3, tritone
-            case 3:
-                toAdd = ( ascendHuh ) ? root + 6  :  root - 6 ;
-                notes.add( toAdd );
-                answer = 3;
-                break;
-
-
-        }
-    }
-
-
-
-
-    private void formMediumQuestion( List<Integer> notes ) {
-        int root = notes.get(0);
-        boolean ascendHuh = rand.nextBoolean();
-
-        // 0 = maj2, 1 = maj3, 2 = maj6, 3 = maj7
-        int type = rand.nextInt(4);
-
-        int toAdd;
-        switch (type) {
-
-            // 0, maj2
-            case 0:
-                toAdd = ( ascendHuh ) ? root + 2  :  root - 2 ;
-                notes.add( toAdd );
-                answer = 0;
-                break;
-
-            // 1, maj3
-            case 1:
-                toAdd = ( ascendHuh ) ? root + 4  :  root - 4 ;
-                notes.add( toAdd );
-                answer = 1;
-                break;
-
-            // 2, maj6
-            case 2:
-                toAdd = ( ascendHuh ) ? root + 9  :  root - 9 ;
-                notes.add( toAdd );
-                answer = 2;
-                break;
-
-            // 3, maj7
-            case 3:
-                toAdd = ( ascendHuh ) ? root + 11  :  root - 11 ;
-                notes.add( toAdd );
-                answer = 3;
-                break;
-        }
+        int boundedVal = possibilities.get( rand.nextInt( bound ));
+        int toAdd = ( ascendHuh ) ? boundedVal : - boundedVal ;
+        notes.add( toAdd );
+        answer = boundedVal - 1;
 
     }
 
-
-
-    private void formHardQuestion( List<Integer> notes ) {
-        int root = notes.get(0);
-        boolean ascendHuh = rand.nextBoolean();
-
-        // 0 = min2, 1 = min3, 2 = min6, 3 = min7
-        int type = rand.nextInt(4);
-
-        int toAdd;
-        switch (type) {
-
-            // 0, min2
-            case 0:
-                toAdd = ( ascendHuh ) ? root + 1  :  root - 1 ;
-                notes.add( toAdd );
-                answer = 0;
-                break;
-
-            // 1, min3
-            case 1:
-                toAdd = ( ascendHuh ) ? root + 3  :  root - 3 ;
-                notes.add( toAdd );
-                answer = 1;
-                break;
-
-            // 2, min6
-            case 2:
-                toAdd = ( ascendHuh ) ? root + 8  :  root - 8 ;
-                notes.add( toAdd );
-                answer = 2;
-                break;
-
-            // 3, min7
-            case 3:
-                toAdd = ( ascendHuh ) ? root + 10  :  root - 10 ;
-                notes.add( toAdd );
-                answer = 3;
-                break;
-        }
-    }
 }

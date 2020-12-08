@@ -1,17 +1,56 @@
 <resources>
     <string name="app_name">AllEars</string>
 
+    <!-- Generic Strings -->
     <string name="button_generic_back">Back</string>
 
+
+    <!-- Interval Landing Activity Strings -->
     <string name="button_interval_landing_easy">Easy</string>
     <string name="button_interval_landing_medium">Medium</string>
     <string name="button_interval_landing_hard">Hard</string>
 
-    <string name="text_interval_question_test">Test</string>
-    <string name="text_interval_question_test2">Test2</string>
+
+    <!-- Interval Question Activity Strings -->
+    <string name="text_interval_question_selected_difficulty">Difficulty: </string>
+    <string name="text_interval_question_score">Total: \nCorrect: \nIncorrect: </string>
     <string name="button_interval_question_repeat">Play Again</string>
     <string name="button_interval_question_new">New Question</string>
 
+    <string name="button_interval_question_answer0">Min2</string>
+    <string name="button_interval_question_answer1">Maj2</string>
+    <string name="button_interval_question_answer2">Min3</string>
+    <string name="button_interval_question_answer3">Maj3</string>
+    <string name="button_interval_question_answer4">Per4</string>
+    <string name="button_interval_question_answer5">Trit</string>
+    <string name="button_interval_question_answer6">Per5</string>
+    <string name="button_interval_question_answer7">Min6</string>
+    <string name="button_interval_question_answer8">Maj6</string>
+    <string name="button_interval_question_answer9">Min7</string>
+    <string name="button_interval_question_answer10">Maj7</string>
+    <string name="button_interval_question_answer11">Oct</string>
+
+
+    <!-- Interval Landing Activity Strings -->
+    <string name="button_chord_landing_easy">Easy</string>
+    <string name="button_chord_landing_medium">Medium</string>
+    <string name="button_chord_landing_hard">Hard</string>
+
+
+    <!-- Chord Question Activity Strings -->
+    <string name="text_chord_question_selected_difficulty">Difficulty: </string>
+    <string name="text_chord_question_score">Total: \nCorrect: \nIncorrect: </string>
+    <string name="button_chord_question_repeat">Play Again</string>
+    <string name="button_chord_question_new">New Question</string>
+
+    <string name="button_chord_question_answer0">Maj Triad</string>
+    <string name="button_chord_question_answer1">Min Triad</string>
+    <string name="button_chord_question_answer2">Maj 7th</string>
+    <string name="button_chord_question_answer3">Min 7th</string>
+    <string name="button_chord_question_answer4">Dom 7th</string>
+    <string name="button_chord_question_answer5">Min7b5</string>
+    <string name="button_chord_question_answer6">TEMP</string>
+    <string name="button_chord_question_answer7">TEMP</string>
 
 
 

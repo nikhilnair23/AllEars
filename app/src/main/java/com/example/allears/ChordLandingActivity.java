@@ -1,50 +1,49 @@
 package com.example.allears;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 
-public class IntervalLandingActivity extends AppCompatActivity {
+public class ChordLandingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_interval_landing);
+        setContentView(R.layout.activity_chord_landing);
     }
-
 
     public void onClick(View view){
         switch (view.getId()) {
-            case R.id.button_interval_landing_back:
+            case R.id.button_chord_landing_back:
                 finish();
                 break;
 
-            case R.id.button_interval_landing_easy:
-                openIntervalQuestionDifficulty( "easy" );
+            case R.id.button_chord_landing_easy:
+                openChordQuestionDifficulty( "easy" );
                 break;
 
-            case R.id.button_interval_landing_medium:
-                openIntervalQuestionDifficulty( "medium" );
+            case R.id.button_chord_landing_medium:
+                openChordQuestionDifficulty( "medium" );
                 break;
 
-            case R.id.button_interval_landing_hard:
-                openIntervalQuestionDifficulty( "hard" );
+            case R.id.button_chord_landing_hard:
+                openChordQuestionDifficulty( "hard" );
                 break;
         }
     }
 
 
-    private void openIntervalQuestionDifficulty(String difficulty ) {
-        Intent intent = new Intent(this, IntervalQuestionActivity.class );
+
+    private void openChordQuestionDifficulty(String difficulty ) {
+        Intent intent = new Intent(this, ChordQuestionActivity.class );
         intent.putExtra( "difficulty", difficulty );
         ArrayList<Integer> blankScore = new ArrayList<Integer>();
         intent.putExtra( "record", blankScore );
         intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
         startActivity( intent );
     }
-
 }
