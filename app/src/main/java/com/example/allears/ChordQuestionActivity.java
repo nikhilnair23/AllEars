@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -41,7 +42,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
     private int answer;
 
     // TODO should be a chord player instead
-    // private IntervalPlayer intervalPlayer;
+    private ChordPlayer chordPlayer;
 
     private boolean guessedWrong;
     private ArrayList<Integer> record;
@@ -92,6 +93,11 @@ public class ChordQuestionActivity extends AppCompatActivity {
         // TODO
         // get the question and use it in a chord player
         List<Integer> question = getQuestionNotes();
+        Integer[] questionArray = questionAsArray( question );
+
+        chordPlayer = new ChordPlayer( this, questionArray );
+        chordPlayer.playChord();
+
         // TODO use this in a chord player, for now display as text
         chordAsText = question.toString();
 
@@ -101,6 +107,19 @@ public class ChordQuestionActivity extends AppCompatActivity {
         difficultySelected.setText( "Difficulty: " + difficulty + "\nQ:" + chordAsText );
         score.setText( record.toString() );
 
+    }
+
+    private Integer[] questionAsArray( List<Integer> question ) {
+
+        //Integer[] questionArray = new Integer[ question.size() - 1 ];
+        Integer[] questionArray = new Integer[ question.size() ];
+
+
+        for ( int i = 0; i < question.size(); i++ ) {
+            questionArray[i] = question.get( i );
+        }
+
+        return questionArray;
     }
 
     // TODO
@@ -172,7 +191,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
             case R.id.button_chord_question_repeat:
                 Toast.makeText( ChordQuestionActivity.this, "Pressed play again", Toast.LENGTH_SHORT).show();
-                // TODO have the chord player play the sound again
+                chordPlayer.playChord();
                 break;
 
             case R.id.button_chord_question_new:
@@ -256,15 +275,15 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
         if (majHuh) {
             // add maj3
-            notes.add( 4 );
+            notes.add( root + 4 );
             answer = 0;
         } else {
             // add b3
-            notes.add( 3 );
+            notes.add( root + 3 );
             answer = 1;
         }
         // add 5th regardless
-        notes.add( 7 );
+        notes.add( root + 7 );
 
         return notes;
     }
@@ -275,18 +294,18 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
         if (majHuh) {
             // add maj3, maj7
-            notes.add( 4 );
-            notes.add( 11 );
+            notes.add( root + 4 );
+            notes.add( root + 11 );
             answer = 2;
         } else {
             // add b3, b7
-            notes.add( 3 );
-            notes.add( 10 );
+            notes.add( root + 3 );
+            notes.add( root + 10 );
             answer = 3;
         }
 
         // add the 5th regardless
-        notes.add( 7 );
+        notes.add( root + 7 );
 
         return notes;
     }
@@ -297,17 +316,17 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
         // add maj3, p5
         if ( domHuh ) {
-            notes.add( 4 );
-            notes.add( 7 );
+            notes.add( root + 4 );
+            notes.add( root + 7 );
             answer = 4;
         } else {
             // add min3, b5
-            notes.add( 3 );
-            notes.add( 6 );
+            notes.add( root + 3 );
+            notes.add( root + 6 );
             answer = 5;
         }
         // add the b7 in both cases
-        notes.add( 10 );
+        notes.add( root + 10 );
 
 
         return notes;
