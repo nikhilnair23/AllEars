@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.login_screen_username_text);
         passwordText = findViewById(R.id.login_screen_password_text);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        dbHelper = new DBHelper(this);
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -89,9 +90,8 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Password doesn't match", Toast.LENGTH_LONG).show();
                             }
                             else{
-                                // TODO: save username to localDB
                                 dbHelper.inserttoDB(username);
-                                finish();
+                                goToMainPage();
                             }
                             return;
                         }
@@ -119,5 +119,12 @@ public class LoginActivity extends AppCompatActivity {
 
         // otherwise, we're totally good
         return text;
+    }
+
+    private void goToMainPage(){
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 }
