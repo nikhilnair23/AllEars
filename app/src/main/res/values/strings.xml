@@ -51,8 +51,7 @@
     <string name="button_chord_question_answer5">Min7b5</string>
     <string name="button_chord_question_answer6">TEMP</string>
     <string name="button_chord_question_answer7">TEMP</string>
-
-
+    <string name="set_volume">Set Volume</string>
 
 
 </resources>

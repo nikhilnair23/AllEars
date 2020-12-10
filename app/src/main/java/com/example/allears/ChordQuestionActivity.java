@@ -49,6 +49,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
     // the chord player to be used to make noises
     private ChordPlayer chordPlayer;
+    private int outputVolume;
 
     // a flag for if the user ever guesses wrong, and an array to hold the users record
     private boolean guessedWrong;
@@ -96,6 +97,10 @@ public class ChordQuestionActivity extends AppCompatActivity {
         difficultySelected.setText( "Difficulty: " + difficulty );
         score.setText( record.toString() );
 
+        // TODO testing, remove this
+//        final GlobalClass globalClass = (GlobalClass) getApplicationContext();
+//        outputVolume = globalClass.getVolume();
+//        Toast.makeText( ChordQuestionActivity.this, "output volume is: " + outputVolume, Toast.LENGTH_SHORT).show();
     }
 
 
