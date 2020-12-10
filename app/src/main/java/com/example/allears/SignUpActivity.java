@@ -93,7 +93,8 @@ public class SignUpActivity extends AppCompatActivity {
                     @NonNull
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                        currentData.setValue(password);
+                        User newUser = new User(usernameChecked, password);
+                        currentData.setValue(newUser);
                         return Transaction.success(currentData);
                     }
 
