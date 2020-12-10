@@ -1,5 +1,6 @@
 package com.example.allears;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -54,6 +55,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     // the button on top used to repeat the sound
     private Button playAgain;
 
+    // USER stuff
+    private String loggedInUser;
+
     // the grid of buttons for use in answers
     private Button button0;
     private Button button1;
@@ -91,6 +95,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
     // fields for firebase
     private DatabaseReference mDatabase;
+    private QuestionFirebaseHelper qFBH;
     private static final String TAG = IntervalQuestionActivity.class.getSimpleName();
 
 
@@ -104,8 +109,21 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         difficultySelected = (TextView)findViewById(R.id.text_interval_question_selected_difficulty);
         score = (TextView)findViewById(R.id.text_interval_question_score);
 
+        // TODO how to pull from database
+        // get user string to add
+//        Cursor entries = dbHelper.getAllEntries();
+//        if ( entries.getCount() > 0 ) {
+//            entries.moveToFirst();
+//            loggedInUser = entries.getString( 1 );
+//        } else {
+//            loggedInUser = "GuestTest";
+//        }
+        loggedInUser = "Guest";
+
         // create a random to be used in this
         rand = new Random();
+
+
 
         // get the difficulty from the intent, if not null set it
         Bundle bundle = getIntent().getExtras();
@@ -145,6 +163,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         // firebase stuff
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        qFBH = new QuestionFirebaseHelper();
         dbHelper = new DBHelper( this );
 
     }
@@ -194,7 +213,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             new Thread( new Runnable() {
                 @Override
                 public void run() {
-                    postRecordToFirebase();
+                    qFBH.postRecordToFirebase( loggedInUser, difficulty, numRight );
+                    // postRecordToFirebase();
                 }
             }).start();
 
