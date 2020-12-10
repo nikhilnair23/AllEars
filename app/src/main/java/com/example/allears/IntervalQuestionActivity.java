@@ -1,17 +1,28 @@
 package com.example.allears;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -28,6 +39,11 @@ import java.util.Random;
 //  -> because overriding them as grey adds the stupid full rectangle, no padding or anything
 
 
+/**
+ * A class to represent a question for IntervalTraining. supports creation of random
+ * interval questions of varying difficulties, and ability to play them through the
+ * IntervalPlayer class.
+ */
 public class IntervalQuestionActivity extends AppCompatActivity {
 
     // placeholder text, shows numbers that question generation obtained
@@ -61,10 +77,22 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     // determined on question generation. Determines functionality of buttons.
     private int answer;
 
+    // the interval player to be used to generate sounds
     private IntervalPlayer intervalPlayer;
 
+    // flags to know if player answered correctly, and a list to keep track of the record
     private boolean guessedWrong;
     private ArrayList<Integer> record;
+    private int numRight;
+
+
+    // field for local database
+    private DBHelper dbHelper;
+
+    // fields for firebase
+    private DatabaseReference mDatabase;
+    private static final String TAG = IntervalQuestionActivity.class.getSimpleName();
+
 
 
     @Override
@@ -72,12 +100,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interval_question);
 
-        // TEMPORARY, these views are only to show what data is being transferred
+        // TODO TEMPORARY, these views are only to show what data is being transferred
         difficultySelected = (TextView)findViewById(R.id.text_interval_question_selected_difficulty);
         score = (TextView)findViewById(R.id.text_interval_question_score);
-
-        // testing interval player (this should be created when question is made)
-        intervalPlayer = new IntervalPlayer(this, 0, 1);
 
         // create a random to be used in this
         rand = new Random();
@@ -89,6 +114,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             difficulty = diff;
         }
         record = bundle.getIntegerArrayList("record");
+        numRight = 0;
 
         // find the play again button, style it a tiny bit
         playAgain = (Button)findViewById(R.id.button_interval_question_repeat);
@@ -107,17 +133,35 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         button10 = (Button)findViewById(R.id.button_interval_question_b10);
         button11 = (Button)findViewById(R.id.button_interval_question_b11);
 
-        // set guessed wrong to false intially
-        guessedWrong = false;
-
         // call a helper to grey out certain buttons and assign one as the correct answer
         rigButtons();
 
-        // get the question
-        List<Integer> question = getQuestionNotes();
-        intervalPlayer = new IntervalPlayer( this, question.get( 0 ), question.get( 1 ) );
+        // call a helper to generate a question, rig up the IntervalPlayer, and play the sound
+        createNewQuestion();
 
-        // adds delay
+        // TODO TEMPORARY: set the views to show what data has been transferred
+        difficultySelected.setText( "Difficulty: " + difficulty );
+        score.setText( record.toString() );
+
+        // firebase stuff
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        dbHelper = new DBHelper( this );
+
+    }
+
+
+
+
+    private void createNewQuestion() {
+
+        // set flag back to false
+        guessedWrong = false;
+
+        // generate a new question, and use this in the interval player
+        List<Integer> question = getQuestionNotes();
+        intervalPlayer = new IntervalPlayer( this, question.get( 0 ), question.get( 1 ));
+
+        // call a handler to play the sound on a delay
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -125,13 +169,43 @@ public class IntervalQuestionActivity extends AppCompatActivity {
                 intervalPlayer.playInterval( 1000 );
             }
         }, 500);
+    }
 
-        // TEMPORARY: set the views to show what data has been transferred
-        difficultySelected.setText( "Difficulty: " + difficulty );
+
+    private void addToRecordAndMakeNewQuestion( int numForRecord ) {
+        record.add( numForRecord );
+        if (numForRecord == 1) {
+            numRight = numRight + 1;
+        }
         score.setText( record.toString() );
-        //score.setText( question.toString() );
+
+        // check if you've compeleted 10
+        finishSetIfCompletedTen();
+
+        createNewQuestion();
+    }
+
+
+    private void finishSetIfCompletedTen() {
+
+        // if it made it to 10, run the things
+        if ( this.record.size() == 10 ) {
+            // otherwise, add users score to firebase
+            new Thread( new Runnable() {
+                @Override
+                public void run() {
+                    postRecordToFirebase();
+                }
+            }).start();
+
+            // also increment your daily training count, to be able to check it against
+            //   your daily goal
+            // TODO increment daily training count
+        }
+
 
     }
+
 
 
     // a private helper method to grey out certain buttons based on difficulty, and to generate
@@ -183,25 +257,53 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
 
 
+    // on click method
     public void onClick(View view) {
         switch (view.getId()) {
 
+            // back case, close this activity
             case R.id.button_interval_question_back:
                 finish();
                 break;
 
+
+            // repeat case, repeat the question sound
             case R.id.button_interval_question_repeat:
+
+                // push toast to the user
                 Toast.makeText( IntervalQuestionActivity.this, "Pressed play again", Toast.LENGTH_SHORT).show();
-                //intervalPlayer.playInterval(1000);
-                intervalPlayer.playInterval( 1000 );
+
+                // use handler to repeat the question
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        intervalPlayer.playInterval( 1000 );
+                    }
+                }, 500);
                 break;
 
+
+            // a case for the new question button
             case R.id.button_interval_question_new:
-                openNewQuestionSameDifficulty( true );
+
+                // creating new question
+                Toast.makeText( IntervalQuestionActivity.this, "Creating New!", Toast.LENGTH_SHORT).show();
+
+                // use handler to delay creation of new question
+                Handler handler2 = new Handler();
+                handler2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Integer toAdd = (guessedWrong) ? 0 : 2 ;
+                        addToRecordAndMakeNewQuestion( toAdd );
+                    }
+                }, 500);
+
                 break;
 
 
-                // pass to helper to check if answered correctly or not??
+            // pass to helper to check if answered correctly or not??
             case R.id.button_interval_question_b0:
                 answerCorrectHuh( 0 );
                 break;
@@ -242,16 +344,34 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     }
 
 
+
+
+
     // check if the button is correct, perform proper action
     private void answerCorrectHuh( int button ) {
+
+        // if the user answered correct
         if ( button == answer ) {
+
+            // send a toast to the user
             Toast.makeText( IntervalQuestionActivity.this, "Correct!", Toast.LENGTH_SHORT).show();
-//            try {
-//                Thread.sleep( 300 );
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            openNewQuestionSameDifficulty( false );
+
+            // use a handler to delay the creation of a new question
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // add integer for correct/incorrect, add to record, and set text on top
+                    Integer toAdd = (guessedWrong) ? 0 : 1 ;
+                    addToRecordAndMakeNewQuestion( toAdd );
+
+//                    record.add( toAdd );
+//                    setScoreText( record.toString() );
+//                    createNewQuestion();
+                }
+            }, 500);
+
+            // if not, push incorrect, and flag that they have guessed wrong
         } else {
             Toast.makeText( IntervalQuestionActivity.this, "Incorrect :((", Toast.LENGTH_SHORT).show();
             this.guessedWrong = true;
@@ -259,32 +379,13 @@ public class IntervalQuestionActivity extends AppCompatActivity {
     }
 
 
-    // a helper to run when the player answers correctly, or starts a new question
-    private void openNewQuestionSameDifficulty( Boolean pressedNextHuh ) {
-        Intent intent = new Intent(this, IntervalQuestionActivity.class );
-        intent.putExtra( "difficulty", difficulty );
-
-        Integer toAdd = (guessedWrong) ? 0 : 1 ;
-        if (pressedNextHuh) {
-            toAdd = 2;
-        }
-        record.add( toAdd );
-        intent.putExtra( "record", record );
-
-        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
-        startActivity( intent );
-    }
-
 
     // runs a switch
     private List<Integer> getQuestionNotes() {
         ArrayList<Integer> notes = new ArrayList<Integer>();
 
         // so here we are going to determine the root, choose a random note in the middle two octaves
-        // using 25 currently, to be pretty much 2 octaves
-
-        //int root = rand.nextInt(25) + 24;
-        // TODO hard coding this right now, need to add more notes?
+        // using 25 currently, to be pretty much 2 octaves, bound it within 1st octave for root.
         int root = rand.nextInt(14);
         notes.add( root );
 
@@ -320,11 +421,56 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         boolean ascendHuh = true;
         // boolean ascendHuh = rand.nextBoolean();
 
+        // bound lets this be contained to this one small method
         int boundedVal = possibilities.get( rand.nextInt( bound ));
         int toAdd = ( ascendHuh ) ? boundedVal : - boundedVal ;
         notes.add( toAdd );
         answer = boundedVal - 1;
 
+    }
+
+
+
+
+
+    private void postRecordToFirebase() {
+
+        Date currentTime = Calendar.getInstance().getTime();
+        String timeStamp = currentTime.toString();
+
+        // TODO
+        // need to get target username from the local database, add as second child
+        //
+
+        mDatabase
+                .child( "Users" )
+                .child( "intervalTest" )
+                .child( "Scores" )
+                .child( "Interval" )
+                .child( difficulty )
+                .child( timeStamp )
+                .runTransaction( new Transaction.Handler() {
+
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+
+                        // if transaction succesfully works it goes in :
+                        // Users -> [username] -> Scores -> Interval -> [difficulty]
+                        //   and the key-value is [timestamp]-[record]
+                        currentData.setValue( numRight );
+                        return Transaction.success( currentData );
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                           @Nullable DataSnapshot currentData) {
+
+                        Log.d(TAG, "postTransaction:onComplete:" + error);
+                        Log.d(TAG, "it's running this thing??");
+
+                    }
+                });
     }
 
 }

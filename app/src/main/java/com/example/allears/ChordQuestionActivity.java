@@ -1,19 +1,37 @@
 package com.example.allears;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * A class to represent a ChordQuestion. it supports random generation of
+ * chord questions of varying difficulties, and references an XML file
+ * that has several buttons, allowing users to answer.
+ */
 public class ChordQuestionActivity extends AppCompatActivity {
 
     // placeholder text, shows numbers that question generation obtained
@@ -41,15 +59,20 @@ public class ChordQuestionActivity extends AppCompatActivity {
     // determined on question generation. Determines functionality of buttons.
     private int answer;
 
-    // TODO should be a chord player instead
+    // the chord player to be used to make noises
     private ChordPlayer chordPlayer;
 
+    // a flag for if the user ever guesses wrong, and an array to hold the users record
     private boolean guessedWrong;
     private ArrayList<Integer> record;
+    private int numRight;
 
+    // field for local database
+    private DBHelper dbHelper;
 
-    // TODO temp for debugging and making sure functional
-    private String chordAsText;
+    // fields for firebase
+    private DatabaseReference mDatabase;
+    private static final String TAG = ChordQuestionActivity.class.getSimpleName();
 
 
 
@@ -58,7 +81,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chord_question);
 
-        // TEMPORARY, these views are only to show what data is being transferred
+        // TODO TEMPORARY, these views are only to show what data is being transferred
         difficultySelected = (TextView)findViewById(R.id.text_chord_question_selected_difficulty);
         score = (TextView)findViewById(R.id.text_chord_question_score);
 
@@ -72,6 +95,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
             difficulty = diff;
         }
         record = bundle.getIntegerArrayList("record");
+        numRight = 0;
 
         // find the play again button, style it a tiny bit
         playAgain = (Button)findViewById(R.id.button_chord_question_repeat);
@@ -84,36 +108,58 @@ public class ChordQuestionActivity extends AppCompatActivity {
         button4 = (Button)findViewById(R.id.button_chord_question_b4);
         button5 = (Button)findViewById(R.id.button_chord_question_b5);
 
-        // set guessed wrong to false intially
-        guessedWrong = false;
-
         // call a helper to grey out certain buttons and assign one as the correct answer
         rigButtons();
 
-        // TODO
-        // get the question and use it in a chord player
-        List<Integer> question = getQuestionNotes();
-        Integer[] questionArray = questionAsArray( question );
+        // call a helper to create a new question
+        createNewQuestion();
 
-        chordPlayer = new ChordPlayer( this, questionArray );
-        chordPlayer.playChord();
-
-        // TODO use this in a chord player, for now display as text
-        chordAsText = question.toString();
-
-
-        // TEMPORARY see the data
-        // TODO remove the seeing difficulty possibly, remove question as string for sure
-        difficultySelected.setText( "Difficulty: " + difficulty + "\nQ:" + chordAsText );
+        // TODO TEMPORARY see the data
+        difficultySelected.setText( "Difficulty: " + difficulty );
         score.setText( record.toString() );
+
+        // firebase stuff
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        dbHelper = new DBHelper( this );
 
     }
 
+
+    /**
+     *
+     */
+    private void createNewQuestion() {
+
+        // reset the guessed wrong flag
+        guessedWrong = false;
+
+        // get the question with a helper
+        List<Integer> question = getQuestionNotes();
+        Integer[] questionArray = questionAsArray( question );
+
+        // create the chord player with the question
+        chordPlayer = new ChordPlayer( this, questionArray );
+
+        // call a handler to play the chord on a delay right after creating it
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                chordPlayer.playChord();
+            }
+        }, 500);
+
+    }
+
+    /**
+     * Return the question as an array
+     * @param question
+     * @return
+     */
     private Integer[] questionAsArray( List<Integer> question ) {
 
-        //Integer[] questionArray = new Integer[ question.size() - 1 ];
+        // initialize array, add everything from list to it
         Integer[] questionArray = new Integer[ question.size() ];
-
 
         for ( int i = 0; i < question.size(); i++ ) {
             questionArray[i] = question.get( i );
@@ -122,7 +168,46 @@ public class ChordQuestionActivity extends AppCompatActivity {
         return questionArray;
     }
 
-    // TODO
+
+
+    private void addToRecordAndMakeNewQuestion( int numForRecord ) {
+        record.add( numForRecord );
+        if (numForRecord == 1) {
+            numRight = numRight + 1;
+        }
+        score.setText( record.toString() );
+
+        // check if you've compeleted 10
+        finishSetIfCompletedTen();
+
+        createNewQuestion();
+    }
+
+
+    private void finishSetIfCompletedTen() {
+
+        // if it made it to 10, run the things
+        if ( this.record.size() == 10 ) {
+            // otherwise, add users score to firebase
+            new Thread( new Runnable() {
+                @Override
+                public void run() {
+                    postRecordToFirebase();
+                }
+            }).start();
+
+            // also increment your daily training count, to be able to check it against
+            //   your daily goal
+            // TODO increment daily training count
+        }
+
+
+    }
+
+
+    /**
+     * Rig up all the buttons, grey some depending on difficulty
+     */
     private void rigButtons() {
 
         // switch for difficulty
@@ -142,87 +227,89 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
     }
 
+    // a helper method to grey out buttons
     private void greyOut( Button button ) {
-        // button.setBackgroundColor(Color.argb(100, 255, 255, 255));
         button.setTextColor(getResources().getColor( R.color.colorButtonTestTwo ));
         button.setBackgroundColor( getResources().getColor( R.color.colorButtonTestTwo) );
         button.setHighlightColor( getResources().getColor( R.color.colorButtonTestTwo) );
-        // button.setVisibility( View.INVISIBLE );
     }
 
+    // grey the buttons associated with the medium difficulty
     private void greyMediumButtons() {
         greyOut( button2 );
         greyOut( button3 );
     }
 
+    // grey the buttons associated with the hard difficulty
     private void greyHardButtons() {
         greyOut( button4 );
         greyOut( button5 );
     }
 
 
-
-
-
-    // a helper to run when the player answers correctly, or starts a new question
-    private void openNewQuestionSameDifficulty( Boolean pressedNextHuh ) {
-        Intent intent = new Intent(this, ChordQuestionActivity.class );
-        intent.putExtra( "difficulty", difficulty );
-
-        Integer toAdd = (guessedWrong) ? 0 : 1 ;
-        if (pressedNextHuh) {
-            toAdd = 2;
-        }
-        record.add( toAdd );
-        intent.putExtra( "record", record );
-
-        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
-        startActivity( intent );
-    }
-
-
-
+    // on click
     public void onClick(View view) {
         switch (view.getId()) {
 
+            // back button, finish the activity
             case R.id.button_chord_question_back:
                 finish();
                 break;
 
+            // repeat button, push a toast to user, use handler to repeat the chord
             case R.id.button_chord_question_repeat:
                 Toast.makeText( ChordQuestionActivity.this, "Pressed play again", Toast.LENGTH_SHORT).show();
-                chordPlayer.playChord();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        chordPlayer.playChord();
+                    }
+                }, 500);
+
                 break;
 
+            // new button, call the createNewQuestion and reset flags, with a handler for delay
             case R.id.button_chord_question_new:
-                openNewQuestionSameDifficulty( true );
+
+                Handler handler2 = new Handler();
+                handler2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Integer toAdd = (guessedWrong) ? 0 : 2 ;
+                        addToRecordAndMakeNewQuestion( toAdd );
+
+                    }
+                }, 500);
+
                 break;
 
+            // cases for all the buttons
             case R.id.button_chord_question_b0:
                 answerCorrectHuh( 0 );
                 break;
-
             case R.id.button_chord_question_b1:
                 answerCorrectHuh( 1 );
                 break;
-
             case R.id.button_chord_question_b2:
                 answerCorrectHuh( 2 );
                 break;
-
             case R.id.button_chord_question_b3:
                 answerCorrectHuh( 3 );
                 break;
-
             case R.id.button_chord_question_b4:
                 answerCorrectHuh( 4 );
                 break;
-
             case R.id.button_chord_question_b5:
                 answerCorrectHuh( 5 );
                 break;
-
         }
+    }
+
+    // helper method to set the score from inside handlers
+    private void setScoreText( String text ) {
+        this.score.setText( text );
     }
 
 
@@ -230,12 +317,15 @@ public class ChordQuestionActivity extends AppCompatActivity {
     private void answerCorrectHuh( int button ) {
         if ( button == answer ) {
             Toast.makeText( ChordQuestionActivity.this, "Correct!", Toast.LENGTH_SHORT).show();
-//            try {
-//                Thread.sleep( 300 );
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            openNewQuestionSameDifficulty( false );
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // add integer for correct/incorrect, add to record, and set text on top
+                    Integer toAdd = (guessedWrong) ? 0 : 1 ;
+                    addToRecordAndMakeNewQuestion( toAdd );
+                }
+            }, 500);
         } else {
             Toast.makeText( ChordQuestionActivity.this, "Incorrect :((", Toast.LENGTH_SHORT).show();
             this.guessedWrong = true;
@@ -248,10 +338,8 @@ public class ChordQuestionActivity extends AppCompatActivity {
         ArrayList<Integer> notes = new ArrayList<Integer>();
 
         // so here we are going to determine the root, choose a random note in the middle two octaves
-        // using 25 currently, to be pretty much 2 octaves
+        // using 25 currently, to be pretty much 2 octaves. Only let root be in first octave
 
-        //int root = rand.nextInt(25) + 24;
-        // TODO hard coding this right now, need to add more notes?
         int root = rand.nextInt(14);
         notes.add( root );
 
@@ -269,6 +357,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
         return notes;
     }
 
+    // only possibly generate a major triad, or a minor triad
     private List<Integer> generateEasyQuestion( ArrayList<Integer> notes ) {
         int root = notes.get( 0 );
         boolean majHuh = rand.nextBoolean();
@@ -288,6 +377,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
         return notes;
     }
 
+    // only possibly generate a major 7th, or a minor 7th
     private List<Integer> generateMediumQuestion( ArrayList<Integer> notes ) {
         int root = notes.get( 0 );
         boolean majHuh = rand.nextBoolean();
@@ -310,6 +400,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
         return notes;
     }
 
+    // only possibly generate a dom7, or a min7b5
     private List<Integer> generateHardQuestion( ArrayList<Integer> notes ) {
         int root = notes.get( 0 );
         boolean domHuh = rand.nextBoolean();
@@ -343,6 +434,49 @@ public class ChordQuestionActivity extends AppCompatActivity {
         }
 
         // this will never be run, possibly bad design, sprinting through getting this functional rn
+        //   no default case, and this private method is only called from another private method
+        //   so 'type' will always fall into one of these three cases, and this line will never
+        //   be run
         return null;
+    }
+
+    private void postRecordToFirebase() {
+
+        Date currentTime = Calendar.getInstance().getTime();
+        String timeStamp = currentTime.toString();
+
+        // TODO
+        // need to get target username from the local database, add as second child
+        //
+
+        mDatabase
+                .child( "Users" )
+                .child( "intervalTest" )
+                .child( "Scores" )
+                .child( "Interval" )
+                .child( difficulty )
+                .child( timeStamp )
+                .runTransaction( new Transaction.Handler() {
+
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+
+                        // if transaction succesfully works it goes in :
+                        // Users -> [username] -> Scores -> Interval -> [difficulty]
+                        //   and the key-value is [timestamp]-[record]
+                        currentData.setValue( numRight );
+                        return Transaction.success( currentData );
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                           @Nullable DataSnapshot currentData) {
+
+                        Log.d(TAG, "postTransaction:onComplete:" + error);
+                        Log.d(TAG, "it's running this thing??");
+
+                    }
+                });
     }
 }
