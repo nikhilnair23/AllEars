@@ -1,13 +1,14 @@
 package com.example.allears;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,7 +116,15 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         // get the question
         List<Integer> question = getQuestionNotes();
         intervalPlayer = new IntervalPlayer( this, question.get( 0 ), question.get( 1 ) );
-        intervalPlayer.playInterval( 1000 );
+
+        // adds delay
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                intervalPlayer.playInterval( 1000 );
+            }
+        }, 500);
 
         // TEMPORARY: set the views to show what data has been transferred
         difficultySelected.setText( "Difficulty: " + difficulty );
