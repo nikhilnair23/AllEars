@@ -91,12 +91,15 @@ public class ChordQuestionActivity extends AppCompatActivity {
         score = (TextView)findViewById(R.id.text_chord_question_score);
 
         // get user string to add
-        Cursor entries = dbHelper.getAllEntries();
-        if (entries.getCount() > 0) {
-            loggedInUser = entries.getString(1);
-        } else {
-            loggedInUser = "Guest";
-        }
+        // TODO how to pull from database
+//        Cursor entries = dbHelper.getAllEntries();
+//        if ( entries.getCount() > 0 ) {
+//            entries.moveToFirst();
+//            loggedInUser = entries.getString( 1 );
+//        } else {
+//            loggedInUser = "Guest";
+//        }
+        loggedInUser = "Guest";
 
         // create a random to be used in this
         rand = new Random();

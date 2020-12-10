@@ -109,13 +109,16 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         difficultySelected = (TextView)findViewById(R.id.text_interval_question_selected_difficulty);
         score = (TextView)findViewById(R.id.text_interval_question_score);
 
+        // TODO how to pull from database
         // get user string to add
-        Cursor entries = dbHelper.getAllEntries();
-        if (entries.getCount() > 0) {
-            loggedInUser = entries.getString(1);
-        } else {
-            loggedInUser = "Guest";
-        }
+//        Cursor entries = dbHelper.getAllEntries();
+//        if ( entries.getCount() > 0 ) {
+//            entries.moveToFirst();
+//            loggedInUser = entries.getString( 1 );
+//        } else {
+//            loggedInUser = "GuestTest";
+//        }
+        loggedInUser = "Guest";
 
         // create a random to be used in this
         rand = new Random();
