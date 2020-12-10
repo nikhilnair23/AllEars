@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -39,6 +40,9 @@ public class ChordQuestionActivity extends AppCompatActivity {
     private TextView difficultySelected;
     private TextView score;
 
+    // USER stuff
+    private String loggedInUser;
+
     // the button on top used to repeat the sound
     private Button playAgain;
 
@@ -72,6 +76,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
     // fields for firebase
     private DatabaseReference mDatabase;
+    private QuestionFirebaseHelper qFBH;
     private static final String TAG = ChordQuestionActivity.class.getSimpleName();
 
 
@@ -84,6 +89,14 @@ public class ChordQuestionActivity extends AppCompatActivity {
         // TODO TEMPORARY, these views are only to show what data is being transferred
         difficultySelected = (TextView)findViewById(R.id.text_chord_question_selected_difficulty);
         score = (TextView)findViewById(R.id.text_chord_question_score);
+
+        // get user string to add
+        Cursor entries = dbHelper.getAllEntries();
+        if (entries.getCount() > 0) {
+            loggedInUser = entries.getString(1);
+        } else {
+            loggedInUser = "Guest";
+        }
 
         // create a random to be used in this
         rand = new Random();
@@ -120,6 +133,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
         // firebase stuff
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        qFBH = new QuestionFirebaseHelper();
         dbHelper = new DBHelper( this );
 
     }
@@ -192,7 +206,9 @@ public class ChordQuestionActivity extends AppCompatActivity {
             new Thread( new Runnable() {
                 @Override
                 public void run() {
-                    postRecordToFirebase();
+                    // TODO get user from local database
+                    qFBH.postRecordToFirebase( loggedInUser, difficulty, numRight );
+                    // postRecordToFirebase();
                 }
             }).start();
 
