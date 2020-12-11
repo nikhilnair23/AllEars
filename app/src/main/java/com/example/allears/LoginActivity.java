@@ -17,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity {
@@ -38,20 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.login_screen_password_text);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         dbHelper = new DBHelper(this);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                users = new HashSet<>();
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String username = ds.child("username").getValue(String.class);
-                    users.add(username);
-                }
-                System.out.println(users);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
     }
 
     public void onClick(View view){
