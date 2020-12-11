@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,7 +21,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,8 +35,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
     // placeholder text, shows numbers that question generation obtained
     // and shows what difficulty was obtained through the intent
-    private TextView difficultySelected;
-    private TextView score;
+    private TextView questionCount;
 
     // USER stuff
     private String loggedInUser;
@@ -87,8 +84,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chord_question);
 
         // TODO TEMPORARY, these views are only to show what data is being transferred
-        difficultySelected = (TextView)findViewById(R.id.text_chord_question_selected_difficulty);
-        score = (TextView)findViewById(R.id.text_chord_question_score);
+        questionCount = (TextView)findViewById( R.id.text_chord_question_question_count );
 
         // get user string to add
         // TODO how to pull from database
@@ -130,15 +126,17 @@ public class ChordQuestionActivity extends AppCompatActivity {
         // call a helper to create a new question
         createNewQuestion();
 
-        // TODO TEMPORARY see the data
-        difficultySelected.setText( "Difficulty: " + difficulty );
-        score.setText( record.toString() );
+        //
+        updateDisplayedQuestionCount();
 
         // firebase stuff
         mDatabase = FirebaseDatabase.getInstance().getReference();
         qFBH = new QuestionFirebaseHelper();
         dbHelper = new DBHelper( this );
+    }
 
+    private void updateDisplayedQuestionCount() {
+        this.questionCount.setText( String.format( "Question %s of 10", record.size() + 1 ));
     }
 
 
@@ -192,7 +190,6 @@ public class ChordQuestionActivity extends AppCompatActivity {
         if (numForRecord == 1) {
             numRight = numRight + 1;
         }
-        score.setText( record.toString() );
 
         // check if you've compeleted 10
         finishSetIfCompletedTen();
@@ -327,11 +324,6 @@ public class ChordQuestionActivity extends AppCompatActivity {
                 answerCorrectHuh( 5 );
                 break;
         }
-    }
-
-    // helper method to set the score from inside handlers
-    private void setScoreText( String text ) {
-        this.score.setText( text );
     }
 
 

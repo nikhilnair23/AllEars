@@ -6,14 +6,14 @@
 
 
     <!-- Interval Landing Activity Strings -->
+    <string name="text_interval_landing_header">Choose a Difficulty of Interval</string>
     <string name="button_interval_landing_easy">Easy</string>
     <string name="button_interval_landing_medium">Medium</string>
     <string name="button_interval_landing_hard">Hard</string>
 
 
     <!-- Interval Question Activity Strings -->
-    <string name="text_interval_question_selected_difficulty">Difficulty: </string>
-    <string name="text_interval_question_score">Total: \nCorrect: \nIncorrect: </string>
+    <string name="text_interval_question_question_count">QuestionCount: </string>
     <string name="button_interval_question_repeat">Play Again</string>
     <string name="button_interval_question_new">New Question</string>
 
@@ -32,14 +32,14 @@
 
 
     <!-- Chord Landing Activity Strings -->
+    <string name="text_chord_landing_header">Choose a Difficulty of Chord</string>
     <string name="button_chord_landing_easy">Easy</string>
     <string name="button_chord_landing_medium">Medium</string>
     <string name="button_chord_landing_hard">Hard</string>
 
 
     <!-- Chord Question Activity Strings -->
-    <string name="text_chord_question_selected_difficulty">Difficulty: </string>
-    <string name="text_chord_question_score">Total: \nCorrect: \nIncorrect: </string>
+    <string name="text_chord_question_question_count">QuestionCount: </string>
     <string name="button_chord_question_repeat">Play Again</string>
     <string name="button_chord_question_new">New Question</string>
 
@@ -49,8 +49,6 @@
     <string name="button_chord_question_answer3">Min 7th</string>
     <string name="button_chord_question_answer4">Dom 7th</string>
     <string name="button_chord_question_answer5">Min7b5</string>
-    <string name="button_chord_question_answer6">TEMP</string>
-    <string name="button_chord_question_answer7">TEMP</string>
 
 
     <!-- Question Finish Activity Strings -->

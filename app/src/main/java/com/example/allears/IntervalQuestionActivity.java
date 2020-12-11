@@ -49,9 +49,7 @@ import java.util.Random;
 public class IntervalQuestionActivity extends AppCompatActivity {
 
     // placeholder text, shows numbers that question generation obtained
-    // and shows what difficulty was obtained through the intent
-    private TextView difficultySelected;
-    private TextView score;
+    private TextView questionCount;
 
     // the button on top used to repeat the sound
     private Button playAgain;
@@ -109,8 +107,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
 
         // TODO TEMPORARY, these views are only to show what data is being transferred
-        difficultySelected = (TextView)findViewById(R.id.text_interval_question_selected_difficulty);
-        score = (TextView)findViewById(R.id.text_interval_question_score);
+        questionCount = (TextView)findViewById( R.id.text_interval_question_question_count );
 
         // TODO how to pull from database
         // get user string to add
@@ -160,15 +157,19 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         // call a helper to generate a question, rig up the IntervalPlayer, and play the sound
         createNewQuestion();
 
-        // TODO TEMPORARY: set the views to show what data has been transferred
-        difficultySelected.setText( "Difficulty: " + difficulty );
-        score.setText( record.toString() );
+        //
+        updateDisplayedQuestionCount();
+
 
         // firebase stuff
         mDatabase = FirebaseDatabase.getInstance().getReference();
         qFBH = new QuestionFirebaseHelper();
         dbHelper = new DBHelper( this );
 
+    }
+
+    private void updateDisplayedQuestionCount() {
+        this.questionCount.setText( String.format( "Question %s of 10", record.size() + 1 ));
     }
 
 
@@ -199,7 +200,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         if (numForRecord == 1) {
             numRight = numRight + 1;
         }
-        score.setText( record.toString() );
+        updateDisplayedQuestionCount();
 
         // check if you've compeleted 10
         finishSetIfCompletedTen();

@@ -85,29 +85,20 @@
         app:layout_constraintStart_toEndOf="@+id/button_chord_question_b0"
         app:layout_constraintTop_toBottomOf="@+id/button_chord_question_b3" />
 
-    <TextView
-        android:id="@+id/text_chord_question_selected_difficulty"
-        android:layout_width="150dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/text_chord_question_selected_difficulty"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/text_chord_question_score"
-        android:layout_width="107dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/text_chord_question_score"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <!-- Grid of Buttons -->
 
+
+    <TextView
+        android:id="@+id/text_chord_question_question_count"
+        android:layout_width="140dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/text_chord_question_question_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_chord_question_back"
