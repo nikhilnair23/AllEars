@@ -141,6 +141,23 @@ public class StatsActivity extends AppCompatActivity {
                 }
 
             }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        difficultySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String newDifficulty = difficultySpinner.getItemAtPosition(position).toString();
+                if (!difficulty.equals(newDifficulty)){
+                    difficulty = newDifficulty;
+                    itemList.clear();
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    getScores(trainingType, difficulty);
+                }
+            }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
