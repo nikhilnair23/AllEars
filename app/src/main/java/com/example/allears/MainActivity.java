@@ -1,13 +1,20 @@
 package com.example.allears;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private DBHelper dbHelper;
@@ -15,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signOutButton;
     private Button settingsButton;
+    private AlarmManager alarmManager;
+    private PendingIntent alarmIntent;
+    private final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         loggedInUserText = findViewById(R.id.logged_in_user_text);
         settingsButton = findViewById(R.id.main_settings_button);
         checkUserSignedIn();
+        createAlarm();
     }
 
     public void onClick(View view){
@@ -104,6 +115,34 @@ public class MainActivity extends AppCompatActivity {
         loggedInUserText.setVisibility(View.INVISIBLE);
         loginButton.setVisibility(View.VISIBLE);
         signOutButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void createAlarm(){
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        alarmIntent  = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        // Set the alarm to start at 21:32 PM
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.MINUTE, 21);
+        calendar.set(Calendar.SECOND,  0);
+
+        // setRepeating() lets you specify a precise custom interval--in this case,
+        // 1 day
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+
+        // TODO: Check counter and display notification if user hasn't reached their goal.
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "ALARMMM!", Toast.LENGTH_LONG).show();
+
+        }
     }
 
 
