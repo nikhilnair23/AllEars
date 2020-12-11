@@ -41,13 +41,10 @@ public class QuestionFirebaseHelper {
         String timeStamp = currentTime.toString();
 
         mDatabase
-                .child( "Users" )
-                // TODO make this first string 'user'
-                .child( user )
-                .child( "Scores" )
+                .child( "Stats" )
                 .child( "Interval" )
                 .child( difficulty )
-                .child( timeStamp )
+                .child( user )
                 .runTransaction( new Transaction.Handler() {
 
                     @NonNull

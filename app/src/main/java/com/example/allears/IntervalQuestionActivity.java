@@ -105,20 +105,22 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interval_question);
 
+        dbHelper = new DBHelper(this);
+
         // TODO TEMPORARY, these views are only to show what data is being transferred
         difficultySelected = (TextView)findViewById(R.id.text_interval_question_selected_difficulty);
         score = (TextView)findViewById(R.id.text_interval_question_score);
 
         // TODO how to pull from database
         // get user string to add
-//        Cursor entries = dbHelper.getAllEntries();
-//        if ( entries.getCount() > 0 ) {
-//            entries.moveToFirst();
-//            loggedInUser = entries.getString( 1 );
-//        } else {
-//            loggedInUser = "GuestTest";
-//        }
-        loggedInUser = "Guest";
+        Cursor entries = dbHelper.getAllEntries();
+        if ( entries.getCount() > 0 ) {
+            entries.moveToFirst();
+            loggedInUser = entries.getString( 1 );
+        } else {
+            loggedInUser = "Guest";
+        }
+//        loggedInUser = "Guest";
 
         // create a random to be used in this
         rand = new Random();
