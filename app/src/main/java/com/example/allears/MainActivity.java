@@ -139,36 +139,40 @@ public class MainActivity extends AppCompatActivity {
         // Set the alarm to start at 21:32 PM
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 43);
+        calendar.set(Calendar.HOUR_OF_DAY, 21);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
-        // TODO: Change this back to daily interval
         // setRepeating() lets you specify a precise custom interval--in this case,
         // 1 day
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                AlarmManager.INTERVAL_DAY, alarmIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1 * 60 * 1000, alarmIntent);
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+
+        // Interval used for testing
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                1 * 60 * 1000, alarmIntent);
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {
         private Intent intent;
 
 
-        // TODO: Check counter and display notification if user hasn't reached their goal.
+        /
         @Override
         public void onReceive(Context context, Intent intent) {
 
 
             if (!checkIfReachedGoal()) {
+                // Intent to open up on clicking the notification
                 intent = new Intent(context, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+                // the special pending intent
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                         intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                //  Builiding out the notification
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1")
                         .setSmallIcon(R.drawable.ic_baseline_hearing_24)
                         .setContentTitle("Reach your goal today!")
@@ -184,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // Checks if the question number stored in the database is greater than or equal to the goal the user set
         public boolean checkIfReachedGoal() {
             Cursor entries = dbHelper.getGoalEntries();
             if (entries.getCount() > 0) {
