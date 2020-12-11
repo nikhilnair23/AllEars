@@ -112,7 +112,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         // TODO how to pull from database
         // get user string to add
-        Cursor entries = dbHelper.getAllEntries();
+        Cursor entries = dbHelper.getAllUserEntries();
         if ( entries.getCount() > 0 ) {
             entries.moveToFirst();
             loggedInUser = entries.getString( 1 );
