@@ -3,6 +3,7 @@ package com.example.allears;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -58,6 +59,7 @@ public class StatsActivity extends AppCompatActivity {
         difficultySpinner = findViewById(R.id.difficulty_spinner);
         getScores(trainingType, difficulty);
         populateSpinners();
+        setSpinnerListeners();
     }
 
     private void getScores(String trainingType, String difficulty){
@@ -122,7 +124,27 @@ public class StatsActivity extends AppCompatActivity {
         difficultySpinnerAdapter = new ArrayAdapter<>(StatsActivity.this,android.R.layout.simple_spinner_item, difficultyList);
         difficultySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         difficultySpinner.setAdapter(difficultySpinnerAdapter);
+    }
 
+    private void setSpinnerListeners(){
+
+        trainingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String newTrainingType =  trainingSpinner.getItemAtPosition(position).toString();
+                if(!trainingType.equals(newTrainingType)){
+                    trainingType = newTrainingType;
+                    getScores(trainingType, difficulty);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void goToMainMenu(){
