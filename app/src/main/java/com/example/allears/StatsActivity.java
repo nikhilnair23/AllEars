@@ -3,6 +3,8 @@ package com.example.allears;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class StatsActivity extends AppCompatActivity {
     private ArrayList<Score> itemList;
@@ -28,6 +32,10 @@ public class StatsActivity extends AppCompatActivity {
     private DatabaseReference scoreRef;
     private String trainingType;
     private String difficulty;
+    private Spinner trainingSpinner;
+    private Spinner difficultySpinner;
+    private ArrayAdapter<String> trainingSpinnerAdapter;
+    private ArrayAdapter<String> difficultySpinnerAdapter;
 
     private static final String INTERVAL_TRAINING = "Interval";
     private static final String CHORD_TRAINING = "Chord";
@@ -46,9 +54,10 @@ public class StatsActivity extends AppCompatActivity {
         createRecyclerView();
         trainingType = INTERVAL_TRAINING;
         difficulty = EASY_DIFFICULTY;
-
-
+        trainingSpinner = findViewById(R.id.training_spinner);
+        difficultySpinner = findViewById(R.id.difficulty_spinner);
         getScores(trainingType, difficulty);
+        populateSpinners();
     }
 
     private void getScores(String trainingType, String difficulty){
@@ -78,6 +87,7 @@ public class StatsActivity extends AppCompatActivity {
         itemList = new ArrayList<>();
     }
 
+    //TODO: Sort the list as you add or maybe sort it at the end.
     public void addItem(Score score){
         itemList.add(score);
         rAdapter.notifyDataSetChanged();
@@ -98,6 +108,21 @@ public class StatsActivity extends AppCompatActivity {
                 goToMainMenu();
                 break;
         }
+    }
+
+    private void populateSpinners(){
+        List<String> trainingList = new ArrayList<String>(
+                Arrays.asList(INTERVAL_TRAINING, CHORD_TRAINING));
+        List<String> difficultyList = new ArrayList<>(
+                Arrays.asList(EASY_DIFFICULTY, MEDIUM_DIFFICULTY, HARD_DIFFICULTY));
+        trainingSpinnerAdapter = new ArrayAdapter<>(StatsActivity.this,android.R.layout.simple_spinner_item, trainingList);
+        trainingSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        trainingSpinner.setAdapter(trainingSpinnerAdapter);
+
+        difficultySpinnerAdapter = new ArrayAdapter<>(StatsActivity.this,android.R.layout.simple_spinner_item, difficultyList);
+        difficultySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        difficultySpinner.setAdapter(difficultySpinnerAdapter);
+
     }
 
     public void goToMainMenu(){
