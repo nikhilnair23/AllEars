@@ -153,18 +153,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {
+        private Intent intent;
+
 
         // TODO: Check counter and display notification if user hasn't reached their goal.
         @Override
         public void onReceive(Context context, Intent intent) {
 
+
             if (!checkIfReachedGoal()) {
+                intent = new Intent(context, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                        intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1")
                         .setSmallIcon(R.drawable.ic_baseline_hearing_24)
                         .setContentTitle("Reach your goal today!")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText("You haven't met your goal for today. Click here to get back on track"))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent)
                         .setAutoCancel(true);
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
