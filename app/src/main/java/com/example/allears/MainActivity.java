@@ -157,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
         private Intent intent;
 
 
-        /
         @Override
         public void onReceive(Context context, Intent intent) {
 
