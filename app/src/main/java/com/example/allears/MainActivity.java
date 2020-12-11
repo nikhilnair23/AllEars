@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.main_sign_out_button:
                 signOut();
                 break;
+
+            case R.id.main_stats_button:
+                openStatsActivity();
+                break;
         }
     }
 
@@ -61,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void openLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity( intent );
+    }
+
+    private void openStatsActivity(){
+        Intent intent = new Intent(this, StatsActivity.class);
         startActivity( intent );
     }
 

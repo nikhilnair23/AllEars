@@ -63,7 +63,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.RviewHolder> {
     public void onBindViewHolder(@NonNull RviewHolder holder, int position) {
         Score current_item = itemList.get(position);
         holder.itemUserName.setText(current_item.getUsername());
-        holder.itemScore.setText(current_item.getScore());
+        holder.itemScore.setText(current_item.getScore().toString());
     }
 
     @Override
