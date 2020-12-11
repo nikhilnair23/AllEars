@@ -1,11 +1,14 @@
 package com.example.allears;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Calendar;
 
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         loggedInUserText = findViewById(R.id.logged_in_user_text);
         settingsButton = findViewById(R.id.main_settings_button);
         globalClass = (GlobalClass) getApplicationContext();
+        createNotificationChannel();
 
         // Initializing current number of sets answered as 0
         dbHelper.truncateGoalTable();
@@ -135,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 11);
+        calendar.set(Calendar.MINUTE, 43);
         calendar.set(Calendar.SECOND, 0);
 
         // TODO: Change this back to daily interval
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 //                AlarmManager.INTERVAL_DAY, alarmIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1 * 60 * 1000, alarmIntent);
+                1 * 30 * 1000, alarmIntent);
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {
@@ -153,9 +159,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (!checkIfReachedGoal()){
+            if (!checkIfReachedGoal()) {
                 Toast.makeText(context, "Get back to the app!", Toast.LENGTH_LONG).show();
-                //pop the notiff
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1")
+                        .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark_normal)
+                        .setContentTitle("Reach your goal today!")
+                        .setContentText("You haven't met your goal for today. Click here to get back on track")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setAutoCancel(true);
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+            // notificationId is a unique int for each notification that you must define
+                notificationManager.notify(1, builder.build());
             }
         }
 
@@ -171,6 +186,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             return false;
+        }
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "NOTIFICATION_CHANNEL";
+            String description = "Channel for notifications?";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
