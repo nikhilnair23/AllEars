@@ -112,7 +112,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
         // TODO how to pull from database
         // get user string to add
-        Cursor entries = dbHelper.getAllEntries();
+        Cursor entries = dbHelper.getAllUserEntries();
         if ( entries.getCount() > 0 ) {
             entries.moveToFirst();
             loggedInUser = entries.getString( 1 );
@@ -233,6 +233,15 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             // also increment your daily training count, to be able to check it against
             //   your daily goal
             // TODO increment daily training count
+            Cursor entries = dbHelper.getGoalEntries();
+            if (entries.getCount() > 0) {
+                entries.moveToFirst();
+                // Getting current questions
+                Integer oldNum = entries.getInt(0);
+                int newNum = oldNum + 1;
+                dbHelper.updateGoalEntry(oldNum,newNum);
+            }
+
 
             // start a new finish activity
             openQuestionFinishActivity();
