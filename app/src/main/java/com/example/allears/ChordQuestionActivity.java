@@ -62,6 +62,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
     // the chord player to be used to make noises
     private ChordPlayer chordPlayer;
+    private int outputVolume;
 
     // a flag for if the user ever guesses wrong, and an array to hold the users record
     private boolean guessedWrong;
@@ -123,6 +124,10 @@ public class ChordQuestionActivity extends AppCompatActivity {
         // call a helper to grey out certain buttons and assign one as the correct answer
         rigButtons();
 
+        // get Settings volume and store in outputVolume
+        final GlobalClass globalClass = (GlobalClass) getApplicationContext();
+        outputVolume = globalClass.getVolume();
+
         // call a helper to create a new question
         createNewQuestion();
 
@@ -154,6 +159,9 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
         // create the chord player with the question
         chordPlayer = new ChordPlayer( this, questionArray );
+
+        // set volume of chordPlayer
+        chordPlayer.setVolume(outputVolume);
 
         // call a handler to play the chord on a delay right after creating it
         Handler handler = new Handler();
