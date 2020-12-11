@@ -4,8 +4,8 @@ import android.app.Application;
 
 public class GlobalClass extends Application{
 
-    private int volume;
-    private int goal;
+    private int volume = 80;
+    private int goal = 3;
 
 
     public int getVolume() {
