@@ -52,6 +52,11 @@
     <string name="button_chord_question_answer6">TEMP</string>
     <string name="button_chord_question_answer7">TEMP</string>
 
+    <string name="set_volume">Set Volume</string>
+    <string name="apply">Apply</string>
+    <string name="set_goal">Set Goal</string>
+
+
 
     <!-- Question Finish Activity Strings -->
     <string name="text_question_finish_header">Question Set Complete!</string>

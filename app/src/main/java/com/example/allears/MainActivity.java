@@ -9,11 +9,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class MainActivity extends AppCompatActivity {
     private DBHelper dbHelper;
     private TextView loggedInUserText;
     private Button loginButton;
     private Button signOutButton;
+    private FloatingActionButton settingsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,13 @@ public class MainActivity extends AppCompatActivity {
         signOutButton = findViewById(R.id.main_sign_out_button);
         dbHelper = new DBHelper(this);
         loggedInUserText = findViewById(R.id.logged_in_user_text);
+        settingsButton = findViewById(R.id.main_settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSettingsActivity();
+            }
+        });
         checkUserSignedIn();
     }
 
@@ -43,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.main_sign_out_button:
                 signOut();
                 break;
+
         }
     }
 
@@ -61,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void openLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity( intent );
+    }
+
+    private void openSettingsActivity(){
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity( intent );
     }
 
