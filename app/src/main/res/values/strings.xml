@@ -63,6 +63,10 @@
 
     <string name="button_question_finish_again">Repeat</string>
 
+    <!-- Settings Activity Strings -->
+    <string name="set_volume">Set Volume</string>
+    <string name="apply">Apply</string>
+    <string name="set_goal">Set Goal</string>
 
 
 
