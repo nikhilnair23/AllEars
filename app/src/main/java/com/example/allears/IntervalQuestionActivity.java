@@ -68,6 +68,7 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
     // the interval player to be used to generate sounds
     private IntervalPlayer intervalPlayer;
+    private int outputVolume;
 
     // flags to know if player answered correctly, and a list to keep track of the record
     private boolean guessedWrong;
@@ -114,6 +115,10 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         // call a helper to grey out certain buttons and assign one as the correct answer
         rigButtons();
 
+        // get Settings volume and store in outputVolume
+        final GlobalClass globalClass = (GlobalClass) getApplicationContext();
+        outputVolume = globalClass.getVolume();
+
         // call a helper to generate a question, rig up the IntervalPlayer, and play the sound
         createNewQuestion();
 
@@ -131,6 +136,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         // generate a new question, and use this in the interval player
         List<Integer> question = getQuestionNotes();
         intervalPlayer = new IntervalPlayer( this, question.get( 0 ), question.get( 1 ));
+
+        // set output level for intervalPlayer
+        intervalPlayer.setVolume(outputVolume);
 
         // call a handler to play the sound on a delay
         Handler handler = new Handler();

@@ -5,7 +5,7 @@ import android.app.Application;
 public class GlobalClass extends Application{
 
     private int volume;
-    private String email;
+    private int goal;
 
 
     public int getVolume() {
@@ -19,14 +19,14 @@ public class GlobalClass extends Application{
 
     }
 
-    public String getEmail() {
+    public int getGoal() {
 
-        return email;
+        return goal;
     }
 
-    public void setEmail(String aEmail) {
+    public void setGoal(int value) {
 
-        email = aEmail;
+        goal = value;
     }
 
 }

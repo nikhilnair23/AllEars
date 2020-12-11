@@ -13,6 +13,7 @@ public class IntervalPlayer {
     HashMap<Integer, Integer> soundPoolMap;
     List<Integer> samples = new ArrayList<Integer>();
     AudioManager audioManager;
+    private int volume;
 
 
     IntervalPlayer(Context context, Integer root, Integer interval) {
@@ -54,21 +55,25 @@ public class IntervalPlayer {
         samples.add(R.raw.c5);
     }
 
+    public void setVolume(int value) {
+        volume = value;
+    }
+
     public void playInterval(int millidelay) {
 
-        float curVolume = audioManager.getStreamVolume(audioManager.STREAM_MUSIC);
+        double curVolume = (float) volume * .01;
         float maxVolume = audioManager.getStreamMaxVolume(audioManager.STREAM_MUSIC);
-        float leftVolume = curVolume/maxVolume;
-        float rightVolume = curVolume/maxVolume;
+//        float leftVolume = curVolume/maxVolume;
+//        float rightVolume = curVolume/maxVolume;
         int priority = 1;
         int no_loop = 0;
         float normal_playback_rate = 1f;
-        soundPool.play(1, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
+        soundPool.play(1, (float) curVolume, (float) curVolume, priority, no_loop, normal_playback_rate);
         try {
             Thread.sleep(millidelay);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        soundPool.play(2, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
+        soundPool.play(2, (float) curVolume, (float) curVolume, priority, no_loop, normal_playback_rate);
     }
 }

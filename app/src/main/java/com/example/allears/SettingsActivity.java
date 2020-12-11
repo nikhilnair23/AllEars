@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
     Button setVolumeButton;
-    private EditText volumeValue;
+    Button setGoalButton;
+    private SeekBar volumeSlider;
+    private SeekBar goalSlider;
     //final GlobalClass globalClass = (GlobalClass) getApplicationContext();
 
 
@@ -26,47 +29,25 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final GlobalClass globalClass = (GlobalClass) getApplicationContext();
-                volumeValue = findViewById(R.id.settings_volumeNumber);
-                globalClass.setVolume(Integer.parseInt(volumeValue.getText().toString()));
-                Toast.makeText( SettingsActivity.this, "settings volume:" + volumeValue.getText(), Toast.LENGTH_SHORT).show();
+                volumeSlider = findViewById(R.id.settings_volumeSlider);
+                globalClass.setVolume((volumeSlider.getProgress()));
+                Toast.makeText( SettingsActivity.this, "Output volume set to: " + volumeSlider.getProgress(), Toast.LENGTH_SHORT).show();
             }
         });
-        final GlobalClass globalClass = (GlobalClass) getApplicationContext();
 
-        globalClass.setVolume(80);
+        setGoalButton = findViewById(R.id.settings_setGoalButton);
+        setGoalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final GlobalClass globalClass = (GlobalClass) getApplicationContext();
+                goalSlider = findViewById(R.id.settings_goalSlider);
+                globalClass.setGoal(goalSlider.getProgress());
+                Toast.makeText(SettingsActivity.this, "Daily training goal set to: " + goalSlider.getProgress(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-//    public void onClick(View view){
-//        switch (view.getId()){
-//            case R.id.settings_setVolumeButton:
-////                final GlobalClass globalClass = (GlobalClass) getApplicationContext();
-////                globalClass.setVolume(75);
-//                Toast.makeText( SettingsActivity.this, "settings volume", Toast.LENGTH_SHORT).show();
-//                break;
-////            case R.id.login_screen_login_button:
-////                login();
-////                break;
-//        }
-//    }
 }
 
 
 
-
-
-//
-//
-//public class SettingsActivity extends AppCompatActivity {
-//
-//    Button setVolumeButton = (Button) findViewById(R.id.setVolumeButton);
-//    final GlobalClass globalClass = (GlobalClass) getApplicationContext();
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_settings);
-//
-//        globalClass.setVolume(80);
-//    }
-//
-//}

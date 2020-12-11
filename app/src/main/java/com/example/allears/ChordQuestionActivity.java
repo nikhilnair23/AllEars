@@ -90,6 +90,10 @@ public class ChordQuestionActivity extends AppCompatActivity {
         // call a helper to grey out certain buttons and assign one as the correct answer
         rigButtons();
 
+        // get Settings volume and store in outputVolume
+        final GlobalClass globalClass = (GlobalClass) getApplicationContext();
+        outputVolume = globalClass.getVolume();
+
         // call a helper to create a new question
         createNewQuestion();
 
@@ -97,8 +101,8 @@ public class ChordQuestionActivity extends AppCompatActivity {
         difficultySelected.setText( "Difficulty: " + difficulty );
         score.setText( record.toString() );
 
-        // TODO testing, remove this
-//        final GlobalClass globalClass = (GlobalClass) getApplicationContext();
+
+
 //        outputVolume = globalClass.getVolume();
 //        Toast.makeText( ChordQuestionActivity.this, "output volume is: " + outputVolume, Toast.LENGTH_SHORT).show();
     }
@@ -118,6 +122,9 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
         // create the chord player with the question
         chordPlayer = new ChordPlayer( this, questionArray );
+
+        // set volume of chordPlayer
+        chordPlayer.setVolume(outputVolume);
 
         // call a handler to play the chord on a delay right after creating it
         Handler handler = new Handler();

@@ -52,6 +52,8 @@
     <string name="button_chord_question_answer6">TEMP</string>
     <string name="button_chord_question_answer7">TEMP</string>
     <string name="set_volume">Set Volume</string>
+    <string name="apply">Apply</string>
+    <string name="set_goal">Set Goal</string>
 
 
 </resources>
