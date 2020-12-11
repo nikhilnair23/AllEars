@@ -3,7 +3,6 @@ package com.example.allears;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ public class ChordPlayer {
     List<Integer> samples = new ArrayList<Integer>();
     AudioManager audioManager;
     Integer numTones;
-    private int volume = 80;
 
 
     ChordPlayer(Context context, Integer... tones) {
@@ -61,20 +59,15 @@ public class ChordPlayer {
 
     public void playChord() {
 
-        double curVolume = (float) volume * (.01);
-//        float maxVolume = audioManager.getStreamMaxVolume(audioManager.STREAM_MUSIC);
-//        float leftVolume = curVolume/maxVolume;
-//        float rightVolume = curVolume/maxVolume;
-        //Toast.makeText(this, "volume is: " + rightVolume, )
+        float curVolume = audioManager.getStreamVolume(audioManager.STREAM_MUSIC);
+        float maxVolume = audioManager.getStreamMaxVolume(audioManager.STREAM_MUSIC);
+        float leftVolume = curVolume/maxVolume;
+        float rightVolume = curVolume/maxVolume;
         int priority = 1;
         int no_loop = 0;
         float normal_playback_rate = 1f;
         for (int i = 0; i < numTones; i++) {
-            soundPool.play(i+1, (float) curVolume, (float) curVolume, priority, no_loop, normal_playback_rate);
+            soundPool.play(i+1, leftVolume, rightVolume, priority, no_loop, normal_playback_rate);
         }
-    }
-
-    public void setVolume(int value) {
-        volume = value;
     }
 }
