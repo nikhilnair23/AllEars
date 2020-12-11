@@ -15,14 +15,16 @@
 
     <TextView
         android:id="@+id/text_interval_question_question_count"
-        android:layout_width="150dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="140dp"
+        android:layout_height="29dp"
+        android:layout_marginBottom="48dp"
         android:text="@string/text_interval_question_question_count"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/button_interval_question_repeat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_interval_question_b0"
