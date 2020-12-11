@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 //                AlarmManager.INTERVAL_DAY, alarmIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1 * 30 * 1000, alarmIntent);
+                1 * 60 * 1000, alarmIntent);
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {
@@ -160,11 +159,11 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
             if (!checkIfReachedGoal()) {
-                Toast.makeText(context, "Get back to the app!", Toast.LENGTH_LONG).show();
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1")
-                        .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark_normal)
+                        .setSmallIcon(R.drawable.ic_baseline_hearing_24)
                         .setContentTitle("Reach your goal today!")
-                        .setContentText("You haven't met your goal for today. Click here to get back on track")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("You haven't met your goal for today. Click here to get back on track"))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setAutoCancel(true);
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

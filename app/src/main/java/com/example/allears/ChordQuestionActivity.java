@@ -1,10 +1,7 @@
 package com.example.allears;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -223,6 +224,14 @@ public class ChordQuestionActivity extends AppCompatActivity {
             // also increment your daily training count, to be able to check it against
             //   your daily goal
             // TODO increment daily training count
+            Cursor entries = dbHelper.getGoalEntries();
+            if (entries.getCount() > 0) {
+                entries.moveToFirst();
+                // Getting current questions
+                Integer oldNum = entries.getInt(0);
+                int newNum = oldNum + 1;
+                dbHelper.updateGoalEntry(oldNum,newNum);
+            }
 
             // open a new finish activity
             openQuestionFinishActivity();
