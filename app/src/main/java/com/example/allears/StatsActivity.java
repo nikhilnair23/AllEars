@@ -2,6 +2,7 @@ package com.example.allears;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,12 @@ public class StatsActivity extends AppCompatActivity {
 
         addItem(new Score("test1",2));
         addItem(new Score("nikhil",0));
+        addItem(new Score("test1",2));
+        addItem(new Score("nikhil",0));
+        addItem(new Score("test1",2));
+        addItem(new Score("nikhil",0));
+        addItem(new Score("test1",2));
+        addItem(new Score("nikhil",0));
     }
 
 
@@ -45,5 +52,17 @@ public class StatsActivity extends AppCompatActivity {
         rAdapter = new RvAdapter(itemList);
         recyclerView.setAdapter(rAdapter);
         recyclerView.setLayoutManager(rLayoutManger);
+    }
+
+    public void onClick(View view){
+        switch (view.getId()) {
+            case R.id.stats_back_button:
+                goToMainMenu();
+                break;
+        }
+    }
+
+    public void goToMainMenu(){
+        finish();
     }
 }
