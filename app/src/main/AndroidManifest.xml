@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChordQuestionActivity"></activity>
+        <activity android:name=".QuestionFinishActivity"></activity>
+        <activity android:name=".ChordQuestionActivity" />
         <activity android:name=".ChordLandingActivity" />
         <activity android:name=".IntervalQuestionActivity" />
         <activity android:name=".IntervalLandingActivity" />
@@ -20,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignUpActivity" />
     </application>
 
 </manifest>

@@ -218,6 +218,9 @@ public class ChordQuestionActivity extends AppCompatActivity {
             // also increment your daily training count, to be able to check it against
             //   your daily goal
             // TODO increment daily training count
+
+            // open a new finish activity
+            openQuestionFinishActivity();
         }
 
 
@@ -497,5 +500,15 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    private void openQuestionFinishActivity() {
+        Intent intent = new Intent( this, QuestionFinishActivity.class );
+        intent.putExtra( "type", "Chord" );
+        intent.putExtra( "difficulty", difficulty );
+        intent.putExtra( "numCorrect", numRight );
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
+        startActivity( intent );
     }
 }

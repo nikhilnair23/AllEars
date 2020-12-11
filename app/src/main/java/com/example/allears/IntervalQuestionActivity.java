@@ -1,6 +1,6 @@
 package com.example.allears;
 
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -221,6 +221,9 @@ public class IntervalQuestionActivity extends AppCompatActivity {
             // also increment your daily training count, to be able to check it against
             //   your daily goal
             // TODO increment daily training count
+
+            // start a new finish activity
+            openQuestionFinishActivity();
         }
 
 
@@ -491,6 +494,16 @@ public class IntervalQuestionActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+
+    private void openQuestionFinishActivity() {
+        Intent intent = new Intent( this, QuestionFinishActivity.class );
+        intent.putExtra( "type", "Interval" );
+        intent.putExtra( "difficulty", difficulty );
+        intent.putExtra( "numCorrect", numRight );
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
+        startActivity( intent );
     }
 
 }
