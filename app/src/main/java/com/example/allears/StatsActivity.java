@@ -135,6 +135,7 @@ public class StatsActivity extends AppCompatActivity {
                 String newTrainingType =  trainingSpinner.getItemAtPosition(position).toString();
                 if(!trainingType.equals(newTrainingType)){
                     trainingType = newTrainingType;
+                    createItemList();
                     getScores(trainingType, difficulty);
                 }
 
