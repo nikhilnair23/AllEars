@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SettingsActivity extends AppCompatActivity {
     Button setVolumeButton;
     Button setGoalButton;
+    Button backButton;
     private SeekBar volumeSlider;
     private SeekBar goalSlider;
     //final GlobalClass globalClass = (GlobalClass) getApplicationContext();
@@ -39,6 +40,14 @@ public class SettingsActivity extends AppCompatActivity {
                 goalSlider = findViewById(R.id.settings_goalSlider);
                 globalClass.setGoal(goalSlider.getProgress());
                 Toast.makeText(SettingsActivity.this, "Daily training goal set to: " + goalSlider.getProgress(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        backButton = findViewById(R.id.settings_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
