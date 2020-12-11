@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager alarmManager;
     private PendingIntent alarmIntent;
     private final Context context = this;
+    private static GlobalClass globalClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
         loggedInUserText = findViewById(R.id.logged_in_user_text);
         settingsButton = findViewById(R.id.main_settings_button);
+        globalClass = (GlobalClass) getApplicationContext();
         checkUserSignedIn();
         createAlarm();
     }
@@ -126,13 +128,15 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 14);
-        calendar.set(Calendar.MINUTE, 21);
+        calendar.set(Calendar.MINUTE, 43);
         calendar.set(Calendar.SECOND,  0);
 
         // setRepeating() lets you specify a precise custom interval--in this case,
         // 1 day
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                AlarmManager.INTERVAL_DAY, alarmIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+                1*60*1000, alarmIntent);
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {
@@ -140,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
         // TODO: Check counter and display notification if user hasn't reached their goal.
         @Override
         public void onReceive(Context context, Intent intent) {
+            Integer goal = globalClass.getGoal();
             Toast.makeText(context, "ALARMMM!", Toast.LENGTH_LONG).show();
-
         }
     }
 
