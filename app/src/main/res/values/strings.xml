@@ -31,7 +31,7 @@
     <string name="button_interval_question_answer11">Oct</string>
 
 
-    <!-- Interval Landing Activity Strings -->
+    <!-- Chord Landing Activity Strings -->
     <string name="button_chord_landing_easy">Easy</string>
     <string name="button_chord_landing_medium">Medium</string>
     <string name="button_chord_landing_hard">Hard</string>
@@ -51,9 +51,26 @@
     <string name="button_chord_question_answer5">Min7b5</string>
     <string name="button_chord_question_answer6">TEMP</string>
     <string name="button_chord_question_answer7">TEMP</string>
+
     <string name="set_volume">Set Volume</string>
     <string name="apply">Apply</string>
     <string name="set_goal">Set Goal</string>
+
+
+
+    <!-- Question Finish Activity Strings -->
+    <string name="text_question_finish_header">Question Set Complete!</string>
+
+    <string name="text_question_finish_results_intro">Results</string>
+
+    <string name="text_question_finish_num_correct">Correct: ____ </string>
+    <string name="text_question_finish_difficulty">Difficulty: ____ </string>
+    <string name="text_question_finish_type">Type: ____ </string>
+
+
+    <string name="button_question_finish_again">Repeat</string>
+
+
 
 
 </resources>

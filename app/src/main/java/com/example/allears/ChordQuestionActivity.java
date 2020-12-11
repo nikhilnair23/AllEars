@@ -1,17 +1,30 @@
 package com.example.allears;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -26,6 +39,9 @@ public class ChordQuestionActivity extends AppCompatActivity {
     // and shows what difficulty was obtained through the intent
     private TextView difficultySelected;
     private TextView score;
+
+    // USER stuff
+    private String loggedInUser;
 
     // the button on top used to repeat the sound
     private Button playAgain;
@@ -54,6 +70,16 @@ public class ChordQuestionActivity extends AppCompatActivity {
     // a flag for if the user ever guesses wrong, and an array to hold the users record
     private boolean guessedWrong;
     private ArrayList<Integer> record;
+    private int numRight;
+
+    // field for local database
+    private DBHelper dbHelper;
+
+    // fields for firebase
+    private DatabaseReference mDatabase;
+    private QuestionFirebaseHelper qFBH;
+    private static final String TAG = ChordQuestionActivity.class.getSimpleName();
+
 
 
     @Override
@@ -65,6 +91,17 @@ public class ChordQuestionActivity extends AppCompatActivity {
         difficultySelected = (TextView)findViewById(R.id.text_chord_question_selected_difficulty);
         score = (TextView)findViewById(R.id.text_chord_question_score);
 
+        // get user string to add
+        // TODO how to pull from database
+//        Cursor entries = dbHelper.getAllEntries();
+//        if ( entries.getCount() > 0 ) {
+//            entries.moveToFirst();
+//            loggedInUser = entries.getString( 1 );
+//        } else {
+//            loggedInUser = "Guest";
+//        }
+        loggedInUser = "Guest";
+
         // create a random to be used in this
         rand = new Random();
 
@@ -75,6 +112,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
             difficulty = diff;
         }
         record = bundle.getIntegerArrayList("record");
+        numRight = 0;
 
         // find the play again button, style it a tiny bit
         playAgain = (Button)findViewById(R.id.button_chord_question_repeat);
@@ -103,8 +141,14 @@ public class ChordQuestionActivity extends AppCompatActivity {
 
 
 
-//        outputVolume = globalClass.getVolume();
-//        Toast.makeText( ChordQuestionActivity.this, "output volume is: " + outputVolume, Toast.LENGTH_SHORT).show();
+
+
+
+        // firebase stuff
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        qFBH = new QuestionFirebaseHelper();
+        dbHelper = new DBHelper( this );
+
     }
 
 
@@ -152,6 +196,47 @@ public class ChordQuestionActivity extends AppCompatActivity {
         }
 
         return questionArray;
+    }
+
+
+
+    private void addToRecordAndMakeNewQuestion( int numForRecord ) {
+        record.add( numForRecord );
+        if (numForRecord == 1) {
+            numRight = numRight + 1;
+        }
+        score.setText( record.toString() );
+
+        // check if you've compeleted 10
+        finishSetIfCompletedTen();
+
+        createNewQuestion();
+    }
+
+
+    private void finishSetIfCompletedTen() {
+
+        // if it made it to 10, run the things
+        if ( this.record.size() == 10 ) {
+            // otherwise, add users score to firebase
+            new Thread( new Runnable() {
+                @Override
+                public void run() {
+                    // TODO get user from local database
+                    qFBH.postRecordToFirebase( loggedInUser, difficulty, numRight );
+                    // postRecordToFirebase();
+                }
+            }).start();
+
+            // also increment your daily training count, to be able to check it against
+            //   your daily goal
+            // TODO increment daily training count
+
+            // open a new finish activity
+            openQuestionFinishActivity();
+        }
+
+
     }
 
 
@@ -228,9 +313,8 @@ public class ChordQuestionActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Integer toAdd = (guessedWrong) ? 0 : 2 ;
-                        record.add( toAdd );
-                        setScoreText( record.toString() );
-                        createNewQuestion();
+                        addToRecordAndMakeNewQuestion( toAdd );
+
                     }
                 }, 500);
 
@@ -274,9 +358,7 @@ public class ChordQuestionActivity extends AppCompatActivity {
                 public void run() {
                     // add integer for correct/incorrect, add to record, and set text on top
                     Integer toAdd = (guessedWrong) ? 0 : 1 ;
-                    record.add( toAdd );
-                    setScoreText( record.toString() );
-                    createNewQuestion();
+                    addToRecordAndMakeNewQuestion( toAdd );
                 }
             }, 500);
         } else {
@@ -391,5 +473,55 @@ public class ChordQuestionActivity extends AppCompatActivity {
         //   so 'type' will always fall into one of these three cases, and this line will never
         //   be run
         return null;
+    }
+
+    private void postRecordToFirebase() {
+
+        Date currentTime = Calendar.getInstance().getTime();
+        String timeStamp = currentTime.toString();
+
+        // TODO
+        // need to get target username from the local database, add as second child
+        //
+
+        mDatabase
+                .child( "Users" )
+                .child( "intervalTest" )
+                .child( "Scores" )
+                .child( "Interval" )
+                .child( difficulty )
+                .child( timeStamp )
+                .runTransaction( new Transaction.Handler() {
+
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+
+                        // if transaction succesfully works it goes in :
+                        // Users -> [username] -> Scores -> Interval -> [difficulty]
+                        //   and the key-value is [timestamp]-[record]
+                        currentData.setValue( numRight );
+                        return Transaction.success( currentData );
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                           @Nullable DataSnapshot currentData) {
+
+                        Log.d(TAG, "postTransaction:onComplete:" + error);
+                        Log.d(TAG, "it's running this thing??");
+
+                    }
+                });
+    }
+
+
+    private void openQuestionFinishActivity() {
+        Intent intent = new Intent( this, QuestionFinishActivity.class );
+        intent.putExtra( "type", "Chord" );
+        intent.putExtra( "difficulty", difficulty );
+        intent.putExtra( "numCorrect", numRight );
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
+        startActivity( intent );
     }
 }

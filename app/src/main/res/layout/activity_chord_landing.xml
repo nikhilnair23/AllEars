@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="56dp"
-        android:text="PLACEHOLDER: INTERVAL LANDING"
+        android:text="PLACEHOLDER: CHORD LANDING"
         app:layout_constraintBottom_toTopOf="@+id/button_chord_landing_easy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

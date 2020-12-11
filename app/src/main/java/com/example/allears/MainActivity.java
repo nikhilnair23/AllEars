@@ -60,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void openActivityIntervalLanding() {
         Intent intent = new Intent(this, IntervalLandingActivity.class );
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
         startActivity( intent );
     }
 
     private void openActivityChordLanding() {
         Intent intent = new Intent(this, ChordLandingActivity.class );
+        intent.addFlags( Intent.FLAG_ACTIVITY_NO_HISTORY );
         startActivity( intent );
     }
 
