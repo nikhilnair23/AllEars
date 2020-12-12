@@ -47,6 +47,9 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.login_screen_login_button:
                 login();
                 break;
+            case R.id.login_back_button:
+                finish();
+                break;
         }
     }
 
