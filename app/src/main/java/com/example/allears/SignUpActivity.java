@@ -40,6 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
         confirmPasswordText = findViewById(R.id.confirm_password_text);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         usersRef = mDatabase.child("Users");
+        users = new HashSet<>();
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -113,6 +114,9 @@ public class SignUpActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.sign_up_button:
                 addUserToDatabase(mDatabase);
+                break;
+            case R.id.signup_back_button:
+                finish();
                 break;
         }
     }
