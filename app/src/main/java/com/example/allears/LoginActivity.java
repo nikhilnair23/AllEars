@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Password doesn't match", Toast.LENGTH_LONG).show();
                             }
                             else{
+                                Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
                                 dbHelper.insertToUserDB(username);
                                 goToMainPage();
                             }

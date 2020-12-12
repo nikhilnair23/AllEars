@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ public class StatsActivity extends AppCompatActivity {
     private ArrayAdapter<String> trainingSpinnerAdapter;
     private ArrayAdapter<String> difficultySpinnerAdapter;
 
+    private ProgressBar progressBar;
+
     // Constants
     private static final String INTERVAL_TRAINING = "Interval";
     private static final String CHORD_TRAINING = "Chord";
@@ -62,6 +65,7 @@ public class StatsActivity extends AppCompatActivity {
 
         trainingSpinner = findViewById(R.id.training_spinner);
         difficultySpinner = findViewById(R.id.difficulty_spinner);
+        progressBar = findViewById(R.id.progress_spinner);
         // Fetch scores
         getScores(trainingType, difficulty);
         populateSpinners();
@@ -70,6 +74,7 @@ public class StatsActivity extends AppCompatActivity {
 
     // Getting the scores from firebase for a particular trainingType and difficulty
     private void getScores(String trainingType, String difficulty){
+        progressBar.setVisibility(View.VISIBLE);
         scoreRef = mDatabase.child(trainingType).child(difficulty);
         scoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -81,6 +86,7 @@ public class StatsActivity extends AppCompatActivity {
                         Score scoreObj = new Score(username, score);
                         addItem(scoreObj);
                     }
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
 

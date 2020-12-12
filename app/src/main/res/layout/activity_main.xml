@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorIntervalQuestionBackground"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/chord_training_button"
-        android:layout_width="105dp"
+        android:layout_width="120dp"
         android:layout_height="74dp"
         android:onClick="onClick"
         android:text="Chord Training"
+        android:background="@drawable/main_chord_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.225"
@@ -21,13 +23,14 @@
 
     <Button
         android:id="@+id/interval_training_button"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="76dp"
+        android:background="@drawable/main_interval_button"
         android:onClick="onClick"
         android:text="Interval Training"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.76"
+        app:layout_constraintHorizontal_bias="0.793"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.554" />
@@ -40,6 +43,7 @@
         android:text="Login"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +57,7 @@
         android:onClick="onClick"
         android:text="Sign Out"
         android:visibility="invisible"
+        android:background="@drawable/login_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -65,6 +70,7 @@
         android:layout_width="175dp"
         android:layout_height="35dp"
         android:drawableLeft="@drawable/ic_sharp_account_circle_24"
+        android:drawablePadding="8dp"
         android:text="Username"
         android:textColor="#042E97"
         android:textSize="26sp"
@@ -79,8 +85,11 @@
 
     <Button
         android:id="@+id/main_stats_button"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/settings_stats_button"
+        android:drawableLeft="@drawable/ic_baseline_poll_24"
+        android:drawablePadding="1dp"
         android:onClick="onClick"
         android:text="Stats"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -92,16 +101,36 @@
 
     <Button
         android:id="@+id/main_settings_button"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/settings_stats_button"
         android:clickable="true"
-        android:text="Settings"
+        android:drawableLeft="@drawable/settings_24px"
+        android:drawablePadding="@dimen/default_gap"
         android:onClick="onClick"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Settings"
+        app:layout_constraintBottom_toBottomOf="@+id/main_stats_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintHorizontal_bias="0.945"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.96" />
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bungee_shade"
+        android:text="All Ears"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
