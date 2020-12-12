@@ -3,20 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:textAlignment="center"
     android:layout_margin="2dp"
+    app:cardBackgroundColor="@color/colorButtonTestOne"
+    android:textAlignment="center"
     app:cardCornerRadius="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_margin="5dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:orientation="horizontal">
+
         <Space
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/item_username"
@@ -24,15 +26,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="7dp"
+            android:gravity="center"
             android:text="username"
             android:textColor="@android:color/black"
-            android:gravity="center"
             android:textSize="15sp"
             android:textStyle="bold" />
+
         <Space
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/item_score"
@@ -40,15 +43,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="7dp"
-            android:text="score"
             android:gravity="center"
+            android:text="score"
             android:textColor="@android:color/black"
             android:textSize="15sp"
             android:textStyle="bold" />
+
         <Space
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
