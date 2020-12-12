@@ -26,6 +26,9 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".StatsActivity"/>
         <receiver android:name=".MainActivity$AlarmReceiver"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
