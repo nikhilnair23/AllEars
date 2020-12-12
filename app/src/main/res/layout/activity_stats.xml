@@ -31,6 +31,21 @@
     </TableLayout>
 
 
+    <ProgressBar
+        android:id="@+id/progress_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:indeterminateOnly="true"
+        android:keepScreenOn="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+        app:layout_constraintVertical_bias="0.754" />
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
