@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorIntervalQuestionBackground"
     tools:context=".SettingsActivity">
 
     <Button
@@ -11,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
+        android:background="@color/colorButtonTestOne"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
@@ -20,6 +22,7 @@
 
     <Button
         android:id="@+id/settings_setVolumeButton"
+        android:background="@color/colorButtonTestOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/set_volume"
@@ -29,6 +32,7 @@
     <SeekBar
         android:id="@+id/settings_volumeSlider"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
+
         android:layout_width="250dp"
         android:layout_height="46dp"
         android:max="100"
@@ -39,6 +43,7 @@
 
     <Button
         android:id="@+id/settings_setGoalButton"
+        android:background="@color/colorButtonTestOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/set_goal"
