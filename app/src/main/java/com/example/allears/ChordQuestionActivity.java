@@ -85,7 +85,6 @@ public class ChordQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chord_question);
 
-        // TODO TEMPORARY, these views are only to show what data is being transferred
         questionCount = (TextView)findViewById( R.id.text_chord_question_question_count );
 
         // get user string to add
@@ -108,7 +107,8 @@ public class ChordQuestionActivity extends AppCompatActivity {
         if (diff != null ) {
             difficulty = diff;
         }
-        record = bundle.getIntegerArrayList("record");
+        // record = bundle.getIntegerArrayList("record");
+        record = new ArrayList<Integer>();
         numRight = 0;
 
         // find the play again button, style it a tiny bit
@@ -203,6 +203,10 @@ public class ChordQuestionActivity extends AppCompatActivity {
         // check if you've compeleted 10
         finishSetIfCompletedTen();
 
+        // update the count
+        updateDisplayedQuestionCount();
+
+        // make a new question
         createNewQuestion();
     }
 
@@ -230,7 +234,9 @@ public class ChordQuestionActivity extends AppCompatActivity {
                 // Getting current questions
                 Integer oldNum = entries.getInt(0);
                 int newNum = oldNum + 1;
-                dbHelper.updateGoalEntry(oldNum,newNum);
+                // dbHelper.updateGoalEntry(oldNum,newNum);
+                dbHelper.truncateGoalTable();
+                dbHelper.insertToGoalDB(newNum);
             }
 
             // open a new finish activity

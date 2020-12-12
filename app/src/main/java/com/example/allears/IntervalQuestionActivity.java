@@ -132,7 +132,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         if (diff != null ) {
             difficulty = diff;
         }
-        record = bundle.getIntegerArrayList("record");
+        // record = bundle.getIntegerArrayList("record");
+        record = new ArrayList<Integer>();
         numRight = 0;
 
         // find the play again button, style it a tiny bit
@@ -208,11 +209,14 @@ public class IntervalQuestionActivity extends AppCompatActivity {
         if (numForRecord == 1) {
             numRight = numRight + 1;
         }
-        updateDisplayedQuestionCount();
 
         // check if you've compeleted 10
         finishSetIfCompletedTen();
 
+        // if not, update count
+        updateDisplayedQuestionCount();
+
+        // create a new question
         createNewQuestion();
     }
 
