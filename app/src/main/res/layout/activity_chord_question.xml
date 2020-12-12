@@ -91,7 +91,7 @@
 
     <TextView
         android:id="@+id/text_chord_question_question_count"
-        android:layout_width="165dp"
+        android:layout_width="wrap_content"
         android:layout_height="29dp"
         android:layout_marginBottom="48dp"
         android:text="@string/text_chord_question_question_count"
