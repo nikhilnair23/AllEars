@@ -88,6 +88,7 @@ public class StatsActivity extends AppCompatActivity {
                     }
                     progressBar.setVisibility(View.INVISIBLE);
                 }
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
