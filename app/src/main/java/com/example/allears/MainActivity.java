@@ -185,6 +185,9 @@ public class MainActivity extends AppCompatActivity {
             // notificationId is a unique int for each notification that you must define
                 notificationManager.notify(1, builder.build());
             }
+            // Resetting count of question sets the user has answered
+            dbHelper.truncateGoalTable();
+            dbHelper.insertToGoalDB(0);
         }
 
         // Checks if the question number stored in the database is greater than or equal to the goal the user set

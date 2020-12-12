@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String GOAL_TABLE = "Goal";
     private static final String C1 = "ID";
     private static final String C2 = "USERNAME";
-    private static final String GOAL_COLUMN = "QUESTION_COUNT";
+    private static final String QUESTION_COUNT_COLUMN = "QUESTION_COUNT";
 
     DBHelper(Context context) {
         super(context, DB_NAME, null, 1);
@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
     boolean insertToGoalDB(Integer number){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues  = new ContentValues();
-        contentValues.put(GOAL_COLUMN, number);
+        contentValues.put(QUESTION_COUNT_COLUMN, number);
 
         long insertStatus = db.insert(GOAL_TABLE, null, contentValues);
         return insertStatus != -1;
@@ -74,9 +74,9 @@ public class DBHelper extends SQLiteOpenHelper {
     boolean updateGoalEntry(Integer oldValue, Integer target) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(GOAL_COLUMN, target);
+        contentValues.put(QUESTION_COUNT_COLUMN, target);
 
-        db.update(TABLE, contentValues, "TARGET = ?", new String[]{oldValue.toString()});
+        db.update(GOAL_TABLE, contentValues, "TARGET = ", new String[]{oldValue.toString()});
         return true;
     }
 

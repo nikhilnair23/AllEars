@@ -239,7 +239,8 @@ public class IntervalQuestionActivity extends AppCompatActivity {
                 // Getting current questions
                 Integer oldNum = entries.getInt(0);
                 int newNum = oldNum + 1;
-                dbHelper.updateGoalEntry(oldNum,newNum);
+                dbHelper.truncateGoalTable();
+                dbHelper.insertToGoalDB(newNum);
             }
 
 
