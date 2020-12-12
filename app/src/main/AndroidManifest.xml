@@ -9,23 +9,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".GlobalClass">        <activity android:name=".QuestionFinishActivity"></activity>
-        <activity android:name=".ChordQuestionActivity" />
-        <activity android:name=".ChordLandingActivity" />
-        <activity android:name=".IntervalQuestionActivity" />
-        <activity android:name=".IntervalLandingActivity" />
-        <activity android:name=".SettingsActivity"/>
-        <activity android:name=".MainActivity">
+        android:name=".GlobalClass">
+        <activity android:name=".QuestionFinishActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ChordQuestionActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ChordLandingActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".IntervalQuestionActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".IntervalLandingActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".StatsActivity"/>
-        <receiver android:name=".MainActivity$AlarmReceiver"/>
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".StatsActivity"
+            android:screenOrientation="portrait" />
+        <receiver android:name=".MainActivity$AlarmReceiver"
+            android:screenOrientation="portrait" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
